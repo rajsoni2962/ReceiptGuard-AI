@@ -42,4 +42,17 @@ class ChromaService:
     ) -> List[Dict[str, Any]]:
         return vector_store.query_policies(query_text=query_text, store_name=store_name, n_results=n_results)
 
+    def query_policy_documents(
+        self,
+        store: Optional[str] = None,
+        query: str = "",
+        store_name: Optional[str] = None,
+        query_text: str = "",
+        n_results: int = 3,
+        **kwargs
+    ) -> List[Dict[str, Any]]:
+        s_name = store_name or store or kwargs.get("store_name") or kwargs.get("store")
+        q = query_text or query or kwargs.get("query_text") or kwargs.get("query") or ""
+        return self.query_policies(query_text=q, store_name=s_name, n_results=n_results)
+
 chroma_service = ChromaService()
