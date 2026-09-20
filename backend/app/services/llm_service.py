@@ -171,31 +171,19 @@ def generate_grounded_answer(
             "grounded": True
         }
 
-    # 4. Generate Answer via Ollama LLM if Online
-    try:
-        url = f"{settings.OLLAMA_BASE_URL}/api/generate"
-        prompt_text = (
-            f"{SYSTEM_PROMPT}\n\n"
-            f"CONTEXT INFORMATION:\n{full_context_str}\n\n"
-            f"USER QUESTION: {question}\n\n"
-            f"ANSWER:"
-        )
-        payload = {
-            "model": settings.OLLAMA_MODEL,
-            "prompt": prompt_text,
-            "stream": False
+    # 4. Generate Answer via Active AI Provider (External API / Ollama / Fallback)
+    from app.services.ai_provider import ai_provider
+    answer_text = ai_provider.generate_completion(
+        system_prompt=SYSTEM_PROMPT,
+        context=full_context_str,
+        question=question
+    )
+    if answer_text:
+        return {
+            "answer": answer_text,
+            "sources": sources,
+            "grounded": True
         }
-        res = httpx.post(url, json=payload, timeout=1.0)
-        if res.status_code == 200:
-            answer_text = res.json().get("response", "").strip()
-            if answer_text:
-                return {
-                    "answer": answer_text,
-                    "sources": sources,
-                    "grounded": True
-                }
-    except Exception:
-        pass
 
     # Deterministic Grounded Synthesis Fallback
     fallback_lines = []

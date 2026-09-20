@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { ReceiptDraft, ReceiptDraftItem, CalculationResult } from '../types';
-import { updateReceiptDraft, confirmReceiptDraft } from '../services/api';
+import { updateReceiptDraft, confirmReceiptDraft, API_ORIGIN } from '../services/api';
 import {
   FileText,
   AlertTriangle,
@@ -310,14 +310,14 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                 draft.preview_url ? (
                   draft.file_type === 'pdf' ? (
                     <iframe
-                      src={`http://localhost:8000${draft.preview_url}`}
+                      src={`${API_ORIGIN}${draft.preview_url}`}
                       className="w-full h-full border-0 rounded-2xl bg-white/5"
                       title="Uploaded Document Preview"
                     />
                   ) : (
                     <div className="w-full h-full p-4 flex items-center justify-center bg-slate-950/50 overflow-auto">
                       <img
-                        src={`http://localhost:8000${draft.preview_url}`}
+                        src={`${API_ORIGIN}${draft.preview_url}`}
                         alt="Uploaded Receipt"
                         className="max-h-full max-w-full object-contain rounded-lg shadow-md"
                       />

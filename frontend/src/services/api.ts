@@ -10,7 +10,12 @@ import type {
   DraftConfirmResponse
 } from '../types';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const envApiUrl = import.meta.env.VITE_API_URL;
+export const API_ORIGIN = envApiUrl
+  ? envApiUrl.replace(/\/api\/?$/, '')
+  : (import.meta.env.DEV ? 'http://localhost:8000' : '');
+
+export const API_BASE_URL = `${API_ORIGIN}/api`;
 
 const api = axios.create({
   baseURL: API_BASE_URL,

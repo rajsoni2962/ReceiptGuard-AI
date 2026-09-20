@@ -17,7 +17,10 @@ Base = declarative_base()
 
 def init_db():
     Base.metadata.create_all(bind=engine)
-    # Lightweight SQLite column schema sync
+    # Lightweight SQLite column schema sync (only applies to SQLite)
+    if not settings.DATABASE_URL.startswith("sqlite"):
+        return
+
     try:
         raw_conn = engine.raw_connection()
         cur = raw_conn.cursor()

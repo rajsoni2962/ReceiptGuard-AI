@@ -79,39 +79,33 @@ def promote_to_vault(
     """
     Permanently stores the exact original uploaded document into the vault.
     Organizes by shopper directory with unique key:
-    uploads/vault/{shopper_id}/{receipt_id}_{safe_filename}
-    
-    Returns metadata dictionary with:
-    - storage_key (safe relative key)
-    - storage_path (absolute filesystem path)
-    - file_size (in bytes)
-    - file_hash (SHA-256)
-    - mime_type
-    - file_type
+    {shopper_id}/receipt_{receipt_id}_{safe_filename}
     """
     if not os.path.exists(temp_file_path):
         raise FileNotFoundError(f"Temporary file '{temp_file_path}' does not exist.")
 
-    safe_name = get_safe_filename(original_filename)
-    shopper_vault_dir = os.path.join(settings.VAULT_DIR, shopper_id)
-    os.makedirs(shopper_vault_dir, exist_ok=True)
+    from app.services.storage_provider import storage_provider
 
-    # Secure internal storage key: shopper_id/receipt_{receipt_id}_{safe_name}
+    safe_name = get_safe_filename(original_filename)
     vault_filename = f"receipt_{receipt_id[:8]}_{safe_name}"
     storage_key = f"{shopper_id}/{vault_filename}"
-    permanent_vault_path = os.path.join(shopper_vault_dir, vault_filename)
 
-    # Copy / Move original bytes exactly as uploaded
-    shutil.copy2(temp_file_path, permanent_vault_path)
-
-    file_size = os.path.getsize(permanent_vault_path)
-    file_hash = compute_file_hash(permanent_vault_path)
+    file_size = os.path.getsize(temp_file_path)
+    file_hash = compute_file_hash(temp_file_path)
     mime_type = get_media_type(original_filename)
     file_type = get_file_type_category(original_filename)
 
+    storage_res = storage_provider.store_file(
+        temp_path=temp_file_path,
+        shopper_id=shopper_id,
+        storage_key=storage_key
+    )
+
+    storage_path = storage_res.get("local_path") or storage_provider.retrieve_file_path(storage_key) or temp_file_path
+
     return {
         "storage_key": storage_key,
-        "storage_path": permanent_vault_path,
+        "storage_path": storage_path,
         "file_size": file_size,
         "file_hash": file_hash,
         "mime_type": mime_type,
@@ -121,23 +115,25 @@ def promote_to_vault(
 
 def resolve_vault_file_path(storage_key: str) -> Optional[str]:
     """
-    Safely resolves a storage_key to an absolute path inside VAULT_DIR.
+    Safely resolves a storage_key to an absolute path inside VAULT_DIR or object storage cache.
     Prevents path traversal attacks.
     """
     if not storage_key:
         return None
 
-    # Clean traversal characters
+    from app.services.storage_provider import storage_provider
+    resolved = storage_provider.retrieve_file_path(storage_key)
+    if resolved and os.path.exists(resolved):
+        return resolved
+
+    # Fallback to direct VAULT_DIR path check
     clean_key = os.path.normpath(storage_key).lstrip(os.path.sep).lstrip("/")
     full_path = os.path.abspath(os.path.join(settings.VAULT_DIR, clean_key))
-
-    # Verify that resolved path is strictly within VAULT_DIR
     vault_root = os.path.abspath(settings.VAULT_DIR)
-    if not full_path.startswith(vault_root):
-        return None
-
-    if os.path.exists(full_path) and os.path.isfile(full_path):
+    if full_path.startswith(vault_root) and os.path.exists(full_path):
         return full_path
+
+    return None
 
     return None
 

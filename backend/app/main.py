@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.database import Base, engine, init_db
-from app.seed_data import seed_database
 from app.api.health import router as health_router
 from app.api.receipts import router as receipts_router
 from app.api.chat import router as chat_router
@@ -14,9 +13,20 @@ from app.websockets.progress import router as ws_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize DB tables & seed demo data on startup
-    init_db()
-    seed_database()
+    # Non-destructive DB schema setup on cold start
+    try:
+        init_db()
+    except Exception as e:
+        print(f"Database init notice: {e}")
+
+    # Run seed_database only if explicitly requested via DEMO_MODE or in local SQLite
+    if settings.DEMO_MODE or (settings.DATABASE_URL.startswith("sqlite") and not settings.IS_SERVERLESS):
+        try:
+            from app.seed_data import seed_database
+            seed_database()
+        except Exception as e:
+            print(f"Seed database notice: {e}")
+
     print("ReceiptGuard AI backend initialization complete.")
     yield
 
@@ -27,10 +37,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Configuration
+# CORS Configuration with Vercel deployment support
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

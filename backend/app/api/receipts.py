@@ -262,6 +262,38 @@ async def confirm_receipt_draft(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+@router.get("/progress/{receipt_id}")
+def get_receipt_progress(
+    receipt_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Serverless HTTP polling fallback for WebSocket timeline progress.
+    Allows frontend clients in serverless environments to retrieve processing stage.
+    """
+    receipt = db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
+    if receipt:
+        return {
+            "stage": "COMPLETE",
+            "progress": 100,
+            "status": receipt.status,
+            "message": "Receipt processing and purchase protection ready."
+        }
+    draft = db.query(ReceiptDraft).filter(ReceiptDraft.draft_id == receipt_id).first()
+    if draft:
+        return {
+            "stage": "REVIEW_REQUIRED",
+            "progress": 85,
+            "status": draft.status,
+            "message": "Draft extracted and awaiting user verification."
+        }
+    return {
+        "stage": "PROCESSING",
+        "progress": 50,
+        "status": "IN_PROGRESS",
+        "message": "Analyzing document..."
+    }
+
 @router.get("/vault", response_model=ReceiptVaultListResponse)
 def get_receipt_vault(
     shopper_id: str = Query("demo-shopper-001"),
