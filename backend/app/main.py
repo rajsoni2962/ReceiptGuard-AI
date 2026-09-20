@@ -39,11 +39,16 @@ async def db_init_middleware(request: Request, call_next):
     ensure_db_ready()
     return await call_next(request)
 
-# CORS Configuration with Vercel deployment support
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+# CORS Configuration with Vercel and Render deployment support
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origin_regex=r"https://.*(\.vercel\.app|\.onrender\.com)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -65,11 +70,42 @@ if not settings.IS_SERVERLESS:
     except Exception as e:
         print(f"WebSocket router notice: {e}")
 
-@app.get("/")
-def root():
-    return {
-        "message": "Welcome to ReceiptGuard AI - Personal Purchase Protection Agent API",
-        "docs": "/docs",
-        "version": settings.VERSION,
-        "status": "online"
-    }
+# Frontend static asset serving when built (Fullstack Render / Docker support)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+repo_root = os.path.dirname(os.path.dirname(current_dir))
+frontend_dist = os.path.join(repo_root, "frontend", "dist")
+
+if os.path.exists(frontend_dist) and os.path.isdir(frontend_dist):
+    assets_dir = os.path.join(frontend_dist, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="frontend_assets")
+
+    @app.get("/")
+    def serve_frontend_root():
+        index_html = os.path.join(frontend_dist, "index.html")
+        if os.path.exists(index_html):
+            return FileResponse(index_html)
+        return {
+            "message": "Welcome to ReceiptGuard AI - Personal Purchase Protection Agent API",
+            "docs": "/docs",
+            "version": settings.VERSION,
+            "status": "online"
+        }
+
+    @app.exception_handler(404)
+    async def custom_404_handler(request: Request, exc: StarletteHTTPException):
+        if not request.url.path.startswith("/api") and not request.url.path.startswith("/docs") and not request.url.path.startswith("/openapi.json"):
+            index_html = os.path.join(frontend_dist, "index.html")
+            if os.path.exists(index_html):
+                return FileResponse(index_html)
+        return {"detail": "Not Found"}
+else:
+    @app.get("/")
+    def root():
+        return {
+            "message": "Welcome to ReceiptGuard AI - Personal Purchase Protection Agent API",
+            "docs": "/docs",
+            "version": settings.VERSION,
+            "status": "online"
+        }
+
