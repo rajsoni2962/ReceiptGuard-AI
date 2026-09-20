@@ -117,6 +117,15 @@ export function App() {
     }
   };
 
+  const handleNavigateHome = () => {
+    setActiveTab('dashboard');
+    setSummary(null);
+    setCurrentReceiptId(null);
+    setIsProcessing(false);
+    setActiveDraft(null);
+    setIsReviewModalOpen(false);
+  };
+
   const isLanding = !summary && !isProcessing && activeTab === 'dashboard';
 
   return (
@@ -138,6 +147,7 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onTryDemo={() => loadFirstVaultReceipt()}
+        onNavigateHome={handleNavigateHome}
         isProcessing={isProcessing}
         isLanding={isLanding}
       />
@@ -164,14 +174,20 @@ export function App() {
 
           {/* Layer 4: Exact Center AI Input Only (.hero-content, z-index: 10) */}
           <div className="hero-content relative z-10 w-full max-w-2xl px-4 my-auto flex flex-col items-center justify-center text-center">
-            <div className="mb-6 flex items-center space-x-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
+            <button
+              type="button"
+              onClick={handleNavigateHome}
+              className="mb-6 flex items-center space-x-2.5 cursor-pointer group focus:outline-hidden transition-transform duration-200 active:scale-95"
+              title="ReceiptGuard AI Homepage"
+              aria-label="ReceiptGuard AI Homepage"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:shadow-indigo-600/45 group-hover:scale-105 transition-all duration-200">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight group-hover:text-indigo-950 transition-colors">
                 ReceiptGuard <span className="text-indigo-600">AI</span>
               </h1>
-            </div>
+            </button>
 
             <UnifiedComposer
               onFileUpload={handleFileUpload}

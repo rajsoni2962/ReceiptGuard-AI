@@ -5,6 +5,7 @@ interface NavbarProps {
   activeTab: 'dashboard' | 'vault' | 'policies' | 'audit' | 'how-it-works';
   setActiveTab: (tab: 'dashboard' | 'vault' | 'policies' | 'audit' | 'how-it-works') => void;
   onTryDemo?: () => void;
+  onNavigateHome?: () => void;
   isProcessing?: boolean;
   isLanding?: boolean;
 }
@@ -12,24 +13,39 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
+  onNavigateHome,
 }) => {
+  const handleLogoClick = () => {
+    if (onNavigateHome) {
+      onNavigateHome();
+    } else {
+      setActiveTab('dashboard');
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full transition-colors duration-300 border-b border-slate-200/80 bg-white/85 backdrop-blur-md text-slate-900 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
-        {/* Brand Logo & Name */}
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-md shadow-indigo-500/20">
+        {/* Brand Logo & Name - Tap to Navigate to Homepage */}
+        <button
+          type="button"
+          onClick={handleLogoClick}
+          className="flex items-center space-x-3 cursor-pointer group text-left focus:outline-hidden transition-transform duration-200 active:scale-95"
+          title="Return to Homepage"
+          aria-label="Return to Homepage"
+        >
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:shadow-indigo-500/35 transition-all duration-200 group-hover:scale-105">
             <ShieldCheck className="w-5 h-5 text-white" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-lg font-bold tracking-tight text-slate-900">
+              <span className="text-lg font-bold tracking-tight text-slate-900 group-hover:text-indigo-950 transition-colors">
                 ReceiptGuard <span className="text-indigo-600 font-extrabold">AI</span>
               </span>
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Navigation Tabs */}
         <nav className="hidden md:flex items-center space-x-1 p-1 rounded-xl border bg-slate-100/90 border-slate-200/90">
