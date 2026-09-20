@@ -123,12 +123,12 @@ export function App() {
     <div className={`font-sans relative ${
       isLanding
         ? 'h-[100dvh] max-h-[100dvh] overflow-hidden bg-white text-slate-900'
-        : 'min-h-screen bg-[#030712] text-slate-100'
+        : 'min-h-screen bg-[#f8fafc] text-slate-900'
     }`}>
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 flex items-center space-x-2.5 px-4 py-3 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-200 shadow-2xl backdrop-blur-md animate-in slide-in-from-top-5 duration-300">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+        <div className="fixed top-20 right-6 z-50 flex items-center space-x-2.5 px-4 py-3 rounded-xl bg-white border border-emerald-200 text-emerald-800 shadow-xl backdrop-blur-md animate-in slide-in-from-top-5 duration-300">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
       )}
@@ -213,20 +213,20 @@ export function App() {
             <DashboardMetrics summary={summary} />
 
             {/* Re-upload / Load Demo Controls */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/40 p-3.5 rounded-2xl border border-slate-800">
-              <div className="text-xs text-slate-400">
-                Viewing active protection for <span className="text-white font-bold">{summary.store}</span> ({summary.purchase_date})
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-xs">
+              <div className="text-xs text-slate-600">
+                Viewing active protection for <span className="text-slate-900 font-bold">{summary.store}</span> ({summary.purchase_date})
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setActiveTab('vault')}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors flex items-center space-x-1"
+                  className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors flex items-center space-x-1"
                 >
-                  <FolderArchive className="w-3.5 h-3.5 text-indigo-400" />
+                  <FolderArchive className="w-3.5 h-3.5 text-indigo-600" />
                   <span>Go to Receipt Vault</span>
                 </button>
 
-                <label className="px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold transition-colors cursor-pointer flex items-center space-x-1">
+                <label className="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-semibold transition-colors cursor-pointer flex items-center space-x-1">
                   <Upload className="w-3.5 h-3.5" />
                   <span>Upload Receipt</span>
                   <input
@@ -266,31 +266,31 @@ export function App() {
                 <OrderStatusCard shopperId={shopperId} />
 
                 {/* Trust Architecture Card */}
-                <div className="glass-card rounded-2xl p-5 border border-indigo-500/20 space-y-3">
-                  <div className="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center space-x-1.5">
-                    <Lock className="w-4 h-4 text-indigo-400" />
+                <div className="glass-card rounded-2xl p-5 border border-slate-200/90 shadow-xs space-y-3">
+                  <div className="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center space-x-1.5">
+                    <Lock className="w-4 h-4 text-indigo-600" />
                     <span>Trust Architecture</span>
                   </div>
-                  <div className="space-y-2 text-xs text-slate-300">
-                    <div className="flex justify-between border-b border-slate-800 pb-1">
-                      <span className="text-slate-400">Vault Storage:</span>
-                      <span className="font-semibold text-emerald-400">Original Binary Preserved</span>
+                  <div className="space-y-2 text-xs text-slate-700">
+                    <div className="flex justify-between border-b border-slate-100 pb-1">
+                      <span className="text-slate-500">Vault Storage:</span>
+                      <span className="font-semibold text-emerald-700">Original Binary Preserved</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-1">
-                      <span className="text-slate-400">AI Role:</span>
-                      <span className="font-semibold text-indigo-300">OCR & Document Extraction</span>
+                    <div className="flex justify-between border-b border-slate-100 pb-1">
+                      <span className="text-slate-500">AI Role:</span>
+                      <span className="font-semibold text-indigo-700">OCR & Document Extraction</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-1">
-                      <span className="text-slate-400">Code Role:</span>
-                      <span className="font-semibold text-emerald-400">Deterministic Arithmetic</span>
+                    <div className="flex justify-between border-b border-slate-100 pb-1">
+                      <span className="text-slate-500">Code Role:</span>
+                      <span className="font-semibold text-emerald-700">Deterministic Arithmetic</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-1">
-                      <span className="text-slate-400">Database Role:</span>
-                      <span className="font-semibold text-cyan-400">Relational Order Truth</span>
+                    <div className="flex justify-between border-b border-slate-100 pb-1">
+                      <span className="text-slate-500">Database Role:</span>
+                      <span className="font-semibold text-cyan-700">Relational Order Truth</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Chroma Role:</span>
-                      <span className="font-semibold text-purple-400">Shopper-Isolated RAG</span>
+                      <span className="text-slate-500">Chroma Role:</span>
+                      <span className="font-semibold text-purple-700">Shopper-Isolated RAG</span>
                     </div>
                   </div>
                 </div>
@@ -324,12 +324,12 @@ export function App() {
 
       {/* Footer (Only rendered on non-landing views so homepage remains strictly non-scrolling) */}
       {!isLanding && (
-        <footer className="border-t border-slate-800 bg-navy-950 py-6 mt-12 text-center text-xs text-slate-400">
+        <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-center text-xs text-slate-500 shadow-2xs">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <span className="font-bold text-slate-200">ReceiptGuard AI</span> — Built for responsible, grounded AI purchase protection.
+              <span className="font-bold text-slate-800">ReceiptGuard AI</span> — Built for responsible, grounded AI purchase protection.
             </div>
-            <div className="text-slate-400 text-[11px]">
+            <div className="text-slate-500 text-[11px]">
               Consumer Purchase Protection • Persistent Receipt Vault • Native PDF + OCR • Deterministic Protection
             </div>
           </div>

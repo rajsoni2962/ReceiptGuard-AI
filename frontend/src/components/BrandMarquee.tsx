@@ -76,20 +76,20 @@ interface BrandPillProps {
 const BrandPill: React.FC<BrandPillProps> = ({ brand }) => {
   return (
     <div
-      className="group flex-shrink-0 flex items-center space-x-3 px-5 py-3 rounded-2xl bg-slate-900/70 border border-slate-800/90 hover:border-indigo-500/40 hover:bg-slate-800/80 transition-all duration-300 shadow-sm cursor-default select-none backdrop-blur-sm"
+      className="group flex-shrink-0 flex items-center space-x-3 px-5 py-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-500/40 hover:bg-slate-50 transition-all duration-300 shadow-2xs cursor-default select-none"
       title={`${brand.name} — ${brand.category}`}
     >
       <div
-        className="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 group-hover:text-white transition-colors duration-200"
+        className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 group-hover:text-indigo-600 transition-colors duration-200"
       >
         <BrandLogoGlyph brand={brand} />
       </div>
 
       <div className="flex flex-col text-left">
-        <span className="text-xs font-bold tracking-tight text-slate-300 group-hover:text-white transition-colors">
+        <span className="text-xs font-bold tracking-tight text-slate-800 group-hover:text-indigo-700 transition-colors">
           {brand.name}
         </span>
-        <span className="text-[10px] text-slate-400 group-hover:text-indigo-300 transition-colors">
+        <span className="text-[10px] text-slate-500 group-hover:text-indigo-600 transition-colors">
           {brand.category}
         </span>
       </div>
@@ -109,16 +109,16 @@ export const BrandMarquee: React.FC = () => {
     >
       {/* Section Header */}
       <div className="text-center space-y-2 max-w-3xl mx-auto px-4">
-        <div className="inline-flex items-center space-x-2 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-[11px] font-semibold uppercase tracking-wider">
-          <Sparkles className="w-3 h-3 text-indigo-400" />
+        <div className="inline-flex items-center space-x-2 px-3 py-0.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-semibold uppercase tracking-wider">
+          <Sparkles className="w-3 h-3 text-indigo-600" />
           <span>Works With The Way You Shop</span>
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
           Universal Purchase Protection Across Stores
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+        <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto">
           Designed around receipts, invoices, and order confirmations from the merchants you already buy from.
         </p>
       </div>

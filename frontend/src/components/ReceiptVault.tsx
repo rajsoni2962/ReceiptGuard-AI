@@ -132,16 +132,16 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-indigo-950/40 border border-slate-800 shadow-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs relative overflow-hidden">
         <div className="space-y-1 relative z-10">
           <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/80">
               Document Vault
             </span>
-            <span className="text-xs text-slate-400 font-medium">Permanent Storage</span>
+            <span className="text-xs text-slate-500 font-medium">Permanent Storage</span>
           </div>
-          <h1 className="text-2xl font-black text-white tracking-tight">RECEIPT VAULT</h1>
-          <p className="text-sm text-slate-400">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">RECEIPT VAULT</h1>
+          <p className="text-sm text-slate-500">
             Your saved purchases and original documents, protected in one secure place.
           </p>
         </div>
@@ -150,14 +150,14 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
           <button
             onClick={fetchVaultData}
             disabled={loading}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
+            className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition"
             title="Refresh Vault"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={onOpenUploader}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition transform hover:-translate-y-0.5"
+            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-sm hover:shadow-md transition transform hover:-translate-y-0.5"
           >
             <Plus className="w-4 h-4" />
             <span>Upload Receipt</span>
@@ -168,54 +168,54 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
       {/* Vault Statistics Top Bar */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400 font-medium">Total Receipts</p>
-              <p className="text-2xl font-extrabold text-white mt-1">{stats.total_receipts}</p>
+              <p className="text-xs text-slate-500 font-medium">Total Receipts</p>
+              <p className="text-2xl font-extrabold text-slate-900 mt-1">{stats.total_receipts}</p>
             </div>
-            <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600">
               <FileText className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400 font-medium">Protected Purchases</p>
-              <p className="text-2xl font-extrabold text-emerald-400 mt-1">{stats.protected_purchases}</p>
+              <p className="text-xs text-slate-500 font-medium">Protected Purchases</p>
+              <p className="text-2xl font-extrabold text-emerald-600 mt-1">{stats.protected_purchases}</p>
             </div>
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
 
-          <div className={`p-4 rounded-xl border flex items-center justify-between transition ${
+          <div className={`p-4 rounded-xl border shadow-xs flex items-center justify-between transition ${
             stats.expiring_soon_count > 0 
-              ? 'bg-amber-950/20 border-amber-500/40' 
-              : 'bg-slate-900/60 border-slate-800'
+              ? 'bg-amber-50/60 border-amber-200' 
+              : 'bg-white border-slate-200/90'
           }`}>
             <div>
-              <p className="text-xs text-slate-400 font-medium">Expiring Soon</p>
-              <p className={`text-2xl font-extrabold mt-1 ${stats.expiring_soon_count > 0 ? 'text-amber-400' : 'text-slate-300'}`}>
+              <p className="text-xs text-slate-500 font-medium">Expiring Soon</p>
+              <p className={`text-2xl font-extrabold mt-1 ${stats.expiring_soon_count > 0 ? 'text-amber-600' : 'text-slate-700'}`}>
                 {stats.expiring_soon_count}
               </p>
             </div>
             <div className={`p-3 rounded-xl border ${
               stats.expiring_soon_count > 0 
-                ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
-                : 'bg-slate-800 border-slate-700 text-slate-400'
+                ? 'bg-amber-100/80 border-amber-200 text-amber-600' 
+                : 'bg-slate-100 border-slate-200 text-slate-500'
             }`}>
               <AlertTriangle className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center justify-between">
             <div>
-              <p className="text-xs text-slate-400 font-medium">Total Purchase Value</p>
-              <p className="text-2xl font-extrabold text-white mt-1">
+              <p className="text-xs text-slate-500 font-medium">Total Purchase Value</p>
+              <p className="text-2xl font-extrabold text-slate-900 mt-1">
                 {formatCurrency(stats.total_purchase_value, stats.currency)}
               </p>
             </div>
-            <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600">
               <Sparkles className="w-5 h-5" />
             </div>
           </div>
@@ -223,7 +223,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
       )}
 
       {/* Search & Filter Controls */}
-      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
+      <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row gap-3">
           
           {/* Search Input */}
@@ -234,7 +234,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search store, invoice, order ID, product name, or file..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"
             />
           </div>
 
@@ -245,7 +245,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
             <select
               value={selectedStore}
               onChange={(e) => setSelectedStore(e.target.value)}
-              className="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-indigo-500 transition"
             >
               <option value="All Stores">All Stores</option>
               {stores.map((s) => (
@@ -257,7 +257,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
             <select
               value={selectedFileType}
               onChange={(e) => setSelectedFileType(e.target.value)}
-              className="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition uppercase"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-indigo-500 transition uppercase"
             >
               <option value="All Types">All Types</option>
               {fileTypes.map((ft) => (
@@ -269,7 +269,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-indigo-500 transition"
             >
               <option value="all">All Statuses</option>
               <option value="protected">Protected</option>
@@ -281,7 +281,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-indigo-500 transition"
             >
               <option value="newest">Sort: Newest First</option>
               <option value="oldest">Sort: Oldest First</option>
@@ -298,22 +298,22 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 space-y-3">
           <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
-          <p className="text-xs text-slate-400">Loading your protected documents...</p>
+          <p className="text-xs text-slate-500">Loading your protected documents...</p>
         </div>
       ) : receipts.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-slate-900/40 border border-slate-800/80 space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto shadow-inner">
+        <div className="p-12 text-center rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-2xs">
             <FileText className="w-8 h-8" />
           </div>
           <div className="max-w-md mx-auto space-y-1">
-            <h3 className="text-lg font-bold text-white">No saved receipts yet.</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-lg font-bold text-slate-900">No saved receipts yet.</h3>
+            <p className="text-xs text-slate-500">
               Upload your first receipt and ReceiptGuard will protect the details that matter.
             </p>
           </div>
           <button
             onClick={onOpenUploader}
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-sm hover:shadow-md transition"
           >
             <Plus className="w-4 h-4" />
             <span>Upload Receipt</span>
@@ -329,27 +329,27 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
               <div
                 key={card.receipt_id}
                 onClick={() => setSelectedReceiptId(card.receipt_id)}
-                className="group relative p-5 rounded-2xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-slate-700/80 shadow-md hover:shadow-xl transition flex flex-col justify-between cursor-pointer"
+                className="group relative p-5 rounded-2xl bg-white hover:bg-slate-50/50 border border-slate-200/90 hover:border-slate-300 shadow-xs hover:shadow-md transition flex flex-col justify-between cursor-pointer"
               >
                 <div>
                   {/* Top Bar: Icon + Store + Badges */}
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 group-hover:border-slate-700 transition">
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 group-hover:border-slate-300 transition">
                         {getFileIcon(card.file_type)}
                       </div>
                       <div>
-                        <h3 className="font-bold text-sm text-white group-hover:text-indigo-300 transition">
+                        <h3 className="font-bold text-sm text-slate-900 group-hover:text-indigo-600 transition">
                           {card.store}
                         </h3>
-                        <p className="text-[11px] text-slate-400 font-mono">
+                        <p className="text-[11px] text-slate-500 font-mono">
                           {card.invoice_number ? `Inv #${card.invoice_number}` : card.order_id ? `Order #${card.order_id}` : card.purchase_date}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-1.5">
-                      <span className="px-2 py-0.5 text-[10px] font-bold rounded uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="px-2 py-0.5 text-[10px] font-bold rounded uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
                         {card.file_type}
                       </span>
                       
@@ -360,7 +360,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
                             e.stopPropagation();
                             setActiveMenuId(activeMenuId === card.receipt_id ? null : card.receipt_id);
                           }}
-                          className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                          className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
                         >
                           <MoreVertical className="w-4 h-4" />
                         </button>
@@ -368,50 +368,50 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
                         {activeMenuId === card.receipt_id && (
                           <div 
                             onClick={(e) => e.stopPropagation()}
-                            className="absolute right-0 mt-1 w-44 rounded-xl bg-slate-950 border border-slate-700 shadow-2xl z-30 py-1 text-xs animate-in fade-in zoom-in-95 duration-150"
+                            className="absolute right-0 mt-1 w-44 rounded-xl bg-white border border-slate-200 shadow-xl z-30 py-1 text-xs animate-in fade-in zoom-in-95 duration-150"
                           >
                             <button
                               onClick={() => {
                                 setActiveMenuId(null);
                                 setSelectedReceiptId(card.receipt_id);
                               }}
-                              className="w-full px-3 py-2 text-left text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-2"
+                              className="w-full px-3 py-2 text-left text-slate-700 hover:text-slate-900 hover:bg-slate-50 flex items-center space-x-2"
                             >
-                              <Eye className="w-3.5 h-3.5 text-indigo-400" />
+                              <Eye className="w-3.5 h-3.5 text-indigo-600" />
                               <span>View Details</span>
                             </button>
                             <a
                               href={downloadUrl}
                               download={card.original_filename || 'receipt'}
                               onClick={() => setActiveMenuId(null)}
-                              className="w-full px-3 py-2 text-left text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-2 block"
+                              className="w-full px-3 py-2 text-left text-slate-700 hover:text-slate-900 hover:bg-slate-50 flex items-center space-x-2 block"
                             >
-                              <Download className="w-3.5 h-3.5 text-emerald-400" />
+                              <Download className="w-3.5 h-3.5 text-emerald-600" />
                               <span>Download Original</span>
                             </a>
                             <button
                               onClick={(e) => handleToggleArchive(card.receipt_id, e)}
-                              className="w-full px-3 py-2 text-left text-slate-300 hover:text-white hover:bg-slate-800 flex items-center space-x-2"
+                              className="w-full px-3 py-2 text-left text-slate-700 hover:text-slate-900 hover:bg-slate-50 flex items-center space-x-2"
                             >
                               {card.is_archived ? (
                                 <>
-                                  <ArchiveRestore className="w-3.5 h-3.5 text-blue-400" />
+                                  <ArchiveRestore className="w-3.5 h-3.5 text-blue-600" />
                                   <span>Restore to Active</span>
                                 </>
                               ) : (
                                 <>
-                                  <Archive className="w-3.5 h-3.5 text-amber-400" />
+                                  <Archive className="w-3.5 h-3.5 text-amber-600" />
                                   <span>Archive Receipt</span>
                                 </>
                               )}
                             </button>
-                            <div className="border-t border-slate-800 my-1" />
+                            <div className="border-t border-slate-100 my-1" />
                             <button
                               onClick={() => {
                                 setActiveMenuId(null);
                                 setReceiptToDelete(card);
                               }}
-                              className="w-full px-3 py-2 text-left text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 flex items-center space-x-2"
+                              className="w-full px-3 py-2 text-left text-rose-600 hover:text-rose-700 hover:bg-rose-50 flex items-center space-x-2"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                               <span>Delete Receipt</span>
@@ -424,37 +424,37 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
 
                   {/* Summary row */}
                   <div className="flex items-center justify-between mt-4 text-xs">
-                    <span className="text-slate-400">
+                    <span className="text-slate-500">
                       {card.purchase_date} • {card.total_items} {card.total_items === 1 ? 'item' : 'items'}
                     </span>
-                    <span className="font-extrabold text-sm font-mono text-emerald-400">
+                    <span className="font-extrabold text-sm font-mono text-emerald-600">
                       {formatCurrency(card.grand_total, card.currency)}
                     </span>
                   </div>
 
                   {/* Items Preview */}
                   {card.items_preview && card.items_preview.length > 0 && (
-                    <p className="text-[11px] text-slate-400 mt-2 line-clamp-1 italic">
+                    <p className="text-[11px] text-slate-500 mt-2 line-clamp-1 italic">
                       {card.items_preview.join(', ')}
                     </p>
                   )}
 
                   {/* Expiring Alert Badge */}
                   {card.expiring_badge_text && (
-                    <div className="mt-3 inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                    <div className="mt-3 inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
                       <span>⚠ {card.expiring_badge_text}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Bottom Action Footer */}
-                <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                  <div className="flex items-center space-x-1 text-slate-400">
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="flex items-center space-x-1 text-slate-500">
                     {card.has_expiring_soon ? (
-                      <span className="text-amber-400 font-medium">Review Active</span>
+                      <span className="text-amber-600 font-medium">Review Active</span>
                     ) : (
-                      <span className="text-emerald-400 font-medium flex items-center space-x-1">
+                      <span className="text-emerald-600 font-medium flex items-center space-x-1">
                         <ShieldCheck className="w-3.5 h-3.5" />
                         <span>Protected</span>
                       </span>
@@ -467,7 +467,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
                         e.stopPropagation();
                         setSelectedReceiptId(card.receipt_id);
                       }}
-                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition"
+                      className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
                     >
                       View
                     </button>
@@ -476,7 +476,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                      className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
                       title="Open Original Document"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -502,20 +502,20 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
 
       {/* Delete Confirmation Modal */}
       {receiptToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-2xl p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center space-x-3 text-rose-400">
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center space-x-3 text-rose-600">
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100">
                 <Trash2 className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Delete Saved Receipt?</h3>
-                <p className="text-xs text-slate-400">This action cannot be undone.</p>
+                <h3 className="text-lg font-bold text-slate-900">Delete Saved Receipt?</h3>
+                <p className="text-xs text-slate-500">This action cannot be undone.</p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Are you sure you want to permanently delete this receipt for <strong className="text-white">{receiptToDelete.store}</strong> ({receiptToDelete.original_filename || 'document'})?
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Are you sure you want to permanently delete this receipt for <strong className="text-slate-900">{receiptToDelete.store}</strong> ({receiptToDelete.original_filename || 'document'})?
               All associated protection calculations and stored files will be permanently purged.
             </p>
 
@@ -523,14 +523,14 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
               <button
                 disabled={isDeleting}
                 onClick={() => setReceiptToDelete(null)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition"
               >
                 Cancel
               </button>
               <button
                 disabled={isDeleting}
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition flex items-center space-x-1.5"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition flex items-center space-x-1.5"
               >
                 {isDeleting ? (
                   <>

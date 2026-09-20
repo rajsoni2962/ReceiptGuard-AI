@@ -57,8 +57,8 @@ export const ReceiptUploader: React.FC<ReceiptUploaderProps> = ({ onFileUpload, 
         onClick={() => !isProcessing && fileInputRef.current?.click()}
         className={`relative overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-all cursor-pointer glass-card ${
           isDragging
-            ? 'border-indigo-500 bg-indigo-500/10 scale-[1.01]'
-            : 'border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/60'
+            ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
+            : 'border-slate-300 hover:border-indigo-500/60 hover:bg-slate-50/80 bg-white shadow-xs'
         } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
       >
         <input
@@ -70,33 +70,33 @@ export const ReceiptUploader: React.FC<ReceiptUploaderProps> = ({ onFileUpload, 
         />
 
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
             <Upload className="w-7 h-7" />
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white tracking-tight">
-              Drop your receipt here, or <span className="text-indigo-400 underline decoration-indigo-500/30">browse files</span>
+            <h3 className="text-lg font-semibold text-slate-900 tracking-tight">
+              Drop your receipt here, or <span className="text-indigo-600 underline decoration-indigo-300">browse files</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Supports PDF, PNG, JPG, JPEG, TXT up to 10MB
             </p>
           </div>
 
-          <div className="flex items-center space-x-4 pt-2 text-[11px] text-slate-400">
+          <div className="flex items-center space-x-4 pt-2 text-[11px] text-slate-500">
             <div className="flex items-center space-x-1">
-              <Shield className="w-3.5 h-3.5 text-indigo-400" />
+              <Shield className="w-3.5 h-3.5 text-indigo-600" />
               <span>Shopper-Isolated Vector Privacy</span>
             </div>
             <div className="flex items-center space-x-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>Automatic Window Calculation</span>
             </div>
           </div>
         </div>
 
         {errorMessage && (
-          <div className="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center justify-center space-x-2">
+          <div className="mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center justify-center space-x-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{errorMessage}</span>
           </div>

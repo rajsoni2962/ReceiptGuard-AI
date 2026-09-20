@@ -542,9 +542,13 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-medium text-slate-300 hover:text-white transition shadow-sm"
+            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition shadow-2xs cursor-pointer ${
+              theme === 'light'
+                ? 'bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 hover:text-slate-900'
+                : 'bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'
+            }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-indigo-400" />
+            <UploadCloud className="w-3.5 h-3.5 text-indigo-600" />
             <span>Upload Receipt</span>
           </button>
 
@@ -555,9 +559,13 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
               setIsExpanded(true);
               setTimeout(() => textareaRef.current?.focus(), 50);
             }}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-medium text-slate-300 hover:text-white transition shadow-sm"
+            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition shadow-2xs cursor-pointer ${
+              theme === 'light'
+                ? 'bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 hover:text-slate-900'
+                : 'bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'
+            }`}
           >
-            <RotateCcw className="w-3.5 h-3.5 text-emerald-400" />
+            <RotateCcw className="w-3.5 h-3.5 text-emerald-600" />
             <span>Check Return Policy</span>
           </button>
 
@@ -568,9 +576,13 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
               setIsExpanded(true);
               setTimeout(() => textareaRef.current?.focus(), 50);
             }}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-medium text-slate-300 hover:text-white transition shadow-sm"
+            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition shadow-2xs cursor-pointer ${
+              theme === 'light'
+                ? 'bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 hover:text-slate-900'
+                : 'bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'
+            }`}
           >
-            <Shield className="w-3.5 h-3.5 text-cyan-400" />
+            <Shield className="w-3.5 h-3.5 text-indigo-600" />
             <span>Check Warranty</span>
           </button>
 
@@ -584,9 +596,13 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
                 setIsExpanded(true);
               }
             }}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-xs font-medium text-slate-300 hover:text-white transition shadow-sm"
+            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition shadow-2xs cursor-pointer ${
+              theme === 'light'
+                ? 'bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 hover:text-slate-900'
+                : 'bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'
+            }`}
           >
-            <Package className="w-3.5 h-3.5 text-amber-400" />
+            <Package className="w-3.5 h-3.5 text-amber-600" />
             <span>Check Order ORD-1001</span>
           </button>
         </div>
@@ -596,17 +612,17 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
       {previewModalUrl && (
         <div 
           onClick={() => setPreviewModalUrl(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-150"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative max-w-3xl max-h-[85vh] bg-slate-900 border border-slate-700 rounded-2xl p-4 overflow-hidden flex flex-col items-center shadow-2xl"
+            className="relative max-w-3xl max-h-[85vh] bg-white border border-slate-200/90 rounded-2xl p-4 overflow-hidden flex flex-col items-center shadow-2xl"
           >
-            <div className="w-full flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-              <span className="text-xs font-semibold text-slate-200 truncate">{previewModalName}</span>
+            <div className="w-full flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
+              <span className="text-xs font-semibold text-slate-800 truncate">{previewModalName}</span>
               <button
                 onClick={() => setPreviewModalUrl(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -614,7 +630,7 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
             <img
               src={previewModalUrl}
               alt="Attachment Preview"
-              className="max-h-[70vh] max-w-full object-contain rounded-lg border border-slate-800"
+              className="max-h-[70vh] max-w-full object-contain rounded-lg border border-slate-200"
             />
           </div>
         </div>

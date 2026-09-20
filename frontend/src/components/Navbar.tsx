@@ -12,14 +12,9 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
-  isLanding = false,
 }) => {
   return (
-    <header className={`sticky top-0 z-40 w-full transition-colors duration-300 ${
-      isLanding
-        ? 'border-b border-slate-200/80 bg-white/85 backdrop-blur-md text-slate-900'
-        : 'border-b border-slate-800 bg-navy-950/80 backdrop-blur-md text-slate-100'
-    }`}>
+    <header className="sticky top-0 z-40 w-full transition-colors duration-300 border-b border-slate-200/80 bg-white/85 backdrop-blur-md text-slate-900 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo & Name */}
@@ -29,9 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className={`text-lg font-bold tracking-tight ${
-                isLanding ? 'text-slate-900' : 'text-white'
-              }`}>
+              <span className="text-lg font-bold tracking-tight text-slate-900">
                 ReceiptGuard <span className="text-indigo-600 font-extrabold">AI</span>
               </span>
             </div>
@@ -39,19 +32,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Navigation Tabs */}
-        <nav className={`hidden md:flex items-center space-x-1 p-1 rounded-xl border ${
-          isLanding
-            ? 'bg-slate-100/90 border-slate-200/90'
-            : 'bg-slate-900/80 border-slate-800'
-        }`}>
+        <nav className="hidden md:flex items-center space-x-1 p-1 rounded-xl border bg-slate-100/90 border-slate-200/90">
           <button
             onClick={() => setActiveTab('dashboard')}
             className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'dashboard'
                 ? 'bg-indigo-600 text-white shadow-xs'
-                : isLanding
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
@@ -63,9 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'vault'
                 ? 'bg-indigo-600 text-white shadow-xs'
-                : isLanding
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -77,9 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'policies'
                 ? 'bg-indigo-600 text-white shadow-xs'
-                : isLanding
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -91,9 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'audit'
                 ? 'bg-indigo-600 text-white shadow-xs'
-                : isLanding
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
@@ -103,11 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* User Profile */}
         <div className="flex items-center space-x-3">
-          <div className={`flex items-center space-x-2.5 px-3 py-1.5 rounded-xl border ${
-            isLanding
-              ? 'bg-slate-50 border-slate-200/80 text-slate-800'
-              : 'bg-slate-900 border-slate-800 text-slate-200'
-          }`}>
+          <div className="flex items-center space-x-2.5 px-3 py-1.5 rounded-xl border bg-slate-50 border-slate-200/80 text-slate-800 shadow-2xs">
             <div className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
               RS
             </div>

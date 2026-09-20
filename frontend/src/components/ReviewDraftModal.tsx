@@ -219,28 +219,28 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
   const isMathValid = validationStatus === 'Verified Math' || validationWarnings.length === 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700/80 w-full max-w-7xl max-h-[92vh] rounded-3xl shadow-2xl shadow-indigo-950/50 flex flex-col overflow-hidden text-slate-100 my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto animate-fadeIn">
+      <div className="bg-white border border-slate-200/90 w-full max-w-7xl max-h-[92vh] rounded-3xl shadow-2xl shadow-slate-300/50 flex flex-col overflow-hidden text-slate-900 my-auto">
         
         {/* MODAL HEADER */}
-        <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/90 backdrop-blur flex items-center justify-between sticky top-0 z-20">
+        <div className="px-6 py-4 border-b border-slate-200/80 bg-white/95 backdrop-blur flex items-center justify-between sticky top-0 z-20">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20">
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">Review & Verify Extracted Receipt</h2>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-300">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Review & Verify Extracted Receipt</h2>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 border border-amber-200 text-amber-700">
                   Temporary Draft
                 </span>
                 {hasChanges && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 animate-pulse">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 border border-indigo-200 text-indigo-700 animate-pulse">
                     Unsaved Edits
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Inspect extracted fields against your uploaded document. Correct any imperfections before activating protection.
               </p>
             </div>
@@ -250,16 +250,16 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
             <button
               onClick={handleRecalculate}
               disabled={isRecalculating}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition flex items-center space-x-1.5"
+              className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition flex items-center space-x-1.5 cursor-pointer"
               title="Recalculate validation & preview deadlines"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRecalculating ? 'animate-spin text-indigo-400' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isRecalculating ? 'animate-spin text-indigo-600' : ''}`} />
               <span>{isRecalculating ? 'Recalculating...' : 'Validate & Preview'}</span>
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -267,30 +267,30 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
         </div>
 
         {/* MODAL BODY (TWO COLUMNS) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 flex-1 overflow-y-auto divide-y lg:divide-y-0 lg:divide-x divide-slate-800">
+        <div className="grid grid-cols-1 lg:grid-cols-12 flex-1 overflow-y-auto divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
           
           {/* LEFT SIDE: DOCUMENT PREVIEW & OCR EVIDENCE (5 Cols) */}
-          <div className="lg:col-span-5 p-5 flex flex-col space-y-4 bg-slate-950/40 overflow-y-auto">
+          <div className="lg:col-span-5 p-5 flex flex-col space-y-4 bg-slate-50/50 overflow-y-auto">
             
             {/* Tab Selector */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-1 p-1 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="flex items-center space-x-1 p-1 rounded-xl bg-slate-100 border border-slate-200">
                 <button
                   onClick={() => setActivePreviewTab('document')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     activePreviewTab === 'document'
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   Document Viewer
                 </button>
                 <button
                   onClick={() => setActivePreviewTab('raw_text')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     activePreviewTab === 'raw_text'
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   Raw OCR Text
@@ -298,61 +298,61 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
               </div>
 
               {draft.filename && (
-                <span className="text-[11px] text-slate-400 truncate max-w-[180px]">
+                <span className="text-[11px] text-slate-500 truncate max-w-[180px]">
                   {draft.filename}
                 </span>
               )}
             </div>
 
             {/* Document Viewer Frame */}
-            <div className="flex-1 min-h-[380px] max-h-[480px] rounded-2xl bg-slate-900/90 border border-slate-800/80 overflow-hidden relative flex flex-col">
+            <div className="flex-1 min-h-[380px] max-h-[480px] rounded-2xl bg-white border border-slate-200 overflow-hidden relative flex flex-col shadow-xs">
               {activePreviewTab === 'document' ? (
                 draft.preview_url ? (
                   draft.file_type === 'pdf' ? (
                     <iframe
                       src={`${API_ORIGIN}${draft.preview_url}`}
-                      className="w-full h-full border-0 rounded-2xl bg-white/5"
+                      className="w-full h-full border-0 rounded-2xl bg-slate-50"
                       title="Uploaded Document Preview"
                     />
                   ) : (
-                    <div className="w-full h-full p-4 flex items-center justify-center bg-slate-950/50 overflow-auto">
+                    <div className="w-full h-full p-4 flex items-center justify-center bg-slate-100/50 overflow-auto">
                       <img
                         src={`${API_ORIGIN}${draft.preview_url}`}
                         alt="Uploaded Receipt"
-                        className="max-h-full max-w-full object-contain rounded-lg shadow-md"
+                        className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
                       />
                     </div>
                   )
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-400 space-y-2">
-                    <FileText className="w-10 h-10 text-slate-600" />
+                    <FileText className="w-10 h-10 text-slate-400" />
                     <p className="text-xs">No direct document stream available.</p>
                   </div>
                 )
               ) : (
-                <div className="p-4 overflow-y-auto font-mono text-xs text-slate-300 leading-relaxed whitespace-pre-wrap selection:bg-indigo-500 selection:text-white">
+                <div className="p-4 overflow-y-auto font-mono text-xs text-slate-800 leading-relaxed whitespace-pre-wrap selection:bg-indigo-100 selection:text-indigo-900 bg-white">
                   {draft.raw_text || 'No raw text extracted.'}
                 </div>
               )}
             </div>
 
             {/* Extraction Confidence & Engine Metadata */}
-            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Extraction Engine:</span>
-                <span className="font-semibold text-indigo-300 uppercase tracking-wide">
+                <span className="text-slate-500">Extraction Engine:</span>
+                <span className="font-semibold text-indigo-600 uppercase tracking-wide">
                   {draft.extraction_method === 'native_pdf' ? '⚡ PyMuPDF Native Text' : '🔍 RapidOCR Vision Engine'}
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Confidence Score:</span>
-                <span className="font-bold text-emerald-400">
+                <span className="text-slate-500">Confidence Score:</span>
+                <span className="font-bold text-emerald-600">
                   {Math.round(draft.ocr_confidence * 100)}% ({draft.extraction_details?.confidence_level || 'High'})
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Status:</span>
-                <span className={`font-semibold ${isMathValid ? 'text-emerald-400' : 'text-amber-400'}`}>
+                <span className="text-slate-500">Status:</span>
+                <span className={`font-semibold ${isMathValid ? 'text-emerald-600' : 'text-amber-600'}`}>
                   {validationStatus}
                 </span>
               </div>
@@ -360,18 +360,18 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
 
             {/* Preview Calculated Return Windows */}
             {previewCalculations.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 space-y-2">
-                <div className="flex items-center space-x-1.5 text-xs font-bold text-indigo-300">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="p-3.5 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-2">
+                <div className="flex items-center space-x-1.5 text-xs font-bold text-indigo-900">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
                   <span>Preview Return & Warranty Windows</span>
                 </div>
                 <div className="space-y-1.5 max-h-[140px] overflow-y-auto">
                   {previewCalculations.map((pc, idx) => (
-                    <div key={idx} className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] flex items-center justify-between">
-                      <span className="font-medium text-slate-200 truncate max-w-[150px]">{pc.item_name}</span>
+                    <div key={idx} className="p-2 rounded-xl bg-white border border-indigo-100/80 text-[11px] flex items-center justify-between shadow-2xs">
+                      <span className="font-medium text-slate-800 truncate max-w-[150px]">{pc.item_name}</span>
                       <div className="text-right">
-                        <span className="text-amber-300 font-bold">Return: {pc.return_deadline}</span>
-                        <span className="text-[10px] text-slate-400 ml-1.5">({pc.return_days_remaining}d left)</span>
+                        <span className="text-indigo-700 font-bold">Return: {pc.return_deadline}</span>
+                        <span className="text-[10px] text-slate-500 ml-1.5">({pc.return_days_remaining}d left)</span>
                       </div>
                     </div>
                   ))}
@@ -381,26 +381,26 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
 
             {/* Detected Invoice Sections (For multi-page / multi-section invoices like Kreo) */}
             {draft.invoice_sections && draft.invoice_sections.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-indigo-500/30 space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold text-indigo-300">
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-800">
                   <div className="flex items-center space-x-1.5">
-                    <FileText className="w-3.5 h-3.5 text-indigo-400" />
+                    <FileText className="w-3.5 h-3.5 text-indigo-600" />
                     <span>Detected Invoice Sections ({draft.invoice_sections.length})</span>
                   </div>
-                  <span className="text-[10px] text-slate-400">Independent Totals</span>
+                  <span className="text-[10px] text-slate-500">Independent Totals</span>
                 </div>
                 <div className="space-y-1.5">
                   {draft.invoice_sections.map((sec, sIdx) => (
-                    <div key={sIdx} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs flex flex-col space-y-1">
+                    <div key={sIdx} className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs flex flex-col space-y-1 shadow-2xs">
                       <div className="flex items-center justify-between font-semibold">
-                        <span className="text-white capitalize">
+                        <span className="text-slate-900 capitalize">
                           Page {sec.page_number}: {sec.section_type.replace('_', ' ')}
                         </span>
-                        <span className="font-mono text-emerald-400 font-bold">
+                        <span className="font-mono text-emerald-700 font-bold">
                           {currency}{sec.grand_total?.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-[11px] text-slate-400">
+                      <div className="flex items-center justify-between text-[11px] text-slate-500">
                         <span>Inv: {sec.invoice_number || 'N/A'}</span>
                         <span className="truncate max-w-[170px]">{sec.seller_name}</span>
                       </div>
@@ -416,14 +416,14 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
             
             {/* Store & Header Details Card */}
             <div className="space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1.5">
-                <Building className="w-4 h-4 text-indigo-400" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center space-x-1.5">
+                <Building className="w-4 h-4 text-indigo-600" />
                 <span>Store & Header Information</span>
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Store / Merchant Name *</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Store / Merchant Name *</label>
                   <input
                     type="text"
                     value={store}
@@ -431,13 +431,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setStore(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     placeholder="e.g. DemoMart, Zara, Apple Store"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Invoice / Receipt #</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Invoice / Receipt #</label>
                   <input
                     type="text"
                     value={invoiceNumber}
@@ -445,13 +445,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setInvoiceNumber(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     placeholder="e.g. INV-1024"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Order ID</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Order ID</label>
                   <input
                     type="text"
                     value={orderId}
@@ -459,13 +459,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setOrderId(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     placeholder="e.g. 405-0187084-9011564"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Sale ID</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Sale ID</label>
                   <input
                     type="text"
                     value={saleId}
@@ -473,13 +473,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setSaleId(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono"
                     placeholder="e.g. SALE-2026"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Purchase Date (YYYY-MM-DD) *</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Purchase Date (YYYY-MM-DD) *</label>
                   <input
                     type="date"
                     value={purchaseDate}
@@ -487,12 +487,12 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setPurchaseDate(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Store Address</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Store Address</label>
                   <input
                     type="text"
                     value={storeAddress}
@@ -500,13 +500,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setStoreAddress(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500"
                     placeholder="e.g. 42 Retail Blvd, Silicon Hub"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Purchase Time</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Purchase Time</label>
                   <input
                     type="text"
                     value={purchaseTime}
@@ -514,20 +514,20 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setPurchaseTime(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500"
                     placeholder="e.g. 14:35:00"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Currency</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Currency</label>
                   <select
                     value={currency}
                     onChange={(e) => {
                       setCurrency(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500"
                   >
                     <option value="₹">₹ (INR)</option>
                     <option value="$">$ (USD)</option>
@@ -537,7 +537,7 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Customer Name</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Customer Name</label>
                   <input
                     type="text"
                     value={customerName}
@@ -545,13 +545,13 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setCustomerName(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500"
                     placeholder="e.g. Alex Mercer"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Payment Method</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Payment Method</label>
                   <input
                     type="text"
                     value={paymentMethod}
@@ -559,7 +559,7 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setPaymentMethod(e.target.value);
                       setHasChanges(true);
                     }}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-indigo-500"
                     placeholder="e.g. Credit Card, UPI, Cash"
                   />
                 </div>
@@ -569,14 +569,14 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
             {/* Line Items Table */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1.5">
-                  <ShoppingBag className="w-4 h-4 text-indigo-400" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center space-x-1.5">
+                  <ShoppingBag className="w-4 h-4 text-indigo-600" />
                   <span>Purchased Line Items ({items.length})</span>
                 </h3>
                 <button
                   type="button"
                   onClick={handleAddItem}
-                  className="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center space-x-1 transition"
+                  className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-semibold flex items-center space-x-1 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Line Item</span>
@@ -587,20 +587,20 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                 {items.map((it, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/70 hover:border-slate-600 transition space-y-2.5"
+                    className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition space-y-2.5"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <input
                         type="text"
                         value={it.name}
                         onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
-                        className="flex-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-sm font-semibold text-white focus:outline-none focus:border-indigo-500"
+                        className="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none focus:border-indigo-500"
                         placeholder="Item Description (e.g. Winter Jacket)"
                       />
                       <button
                         type="button"
                         onClick={() => handleRemoveItem(idx)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
                         title="Delete Item"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -609,11 +609,11 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
 
                     <div className="grid grid-cols-12 gap-2 text-xs">
                       <div className="col-span-4">
-                        <label className="block text-[10px] text-slate-400 mb-0.5">Category</label>
+                        <label className="block text-[10px] text-slate-500 mb-0.5">Category</label>
                         <select
                           value={it.category}
                           onChange={(e) => handleItemChange(idx, 'category', e.target.value)}
-                          className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-indigo-500"
+                          className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs focus:outline-none focus:border-indigo-500"
                         >
                           <option value="Clothing">Clothing</option>
                           <option value="Electronics">Electronics</option>
@@ -624,35 +624,35 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       </div>
 
                       <div className="col-span-2">
-                        <label className="block text-[10px] text-slate-400 mb-0.5">Qty</label>
+                        <label className="block text-[10px] text-slate-500 mb-0.5">Qty</label>
                         <input
                           type="number"
                           min="1"
                           value={it.quantity}
                           onChange={(e) => handleItemChange(idx, 'quantity', parseInt(e.target.value) || 1)}
-                          className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-indigo-500 text-center"
+                          className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-indigo-500 text-center"
                         />
                       </div>
 
                       <div className="col-span-3">
-                        <label className="block text-[10px] text-slate-400 mb-0.5">Unit Price ({currency})</label>
+                        <label className="block text-[10px] text-slate-500 mb-0.5">Unit Price ({currency})</label>
                         <input
                           type="number"
                           step="0.01"
                           value={it.unit_price ?? ''}
                           onChange={(e) => handleItemChange(idx, 'unit_price', parseFloat(e.target.value) || 0)}
-                          className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-indigo-500 text-right"
+                          className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-indigo-500 text-right"
                         />
                       </div>
 
                       <div className="col-span-3">
-                        <label className="block text-[10px] text-slate-400 mb-0.5">Total ({currency})</label>
+                        <label className="block text-[10px] text-slate-500 mb-0.5">Total ({currency})</label>
                         <input
                           type="number"
                           step="0.01"
                           value={it.total_price ?? it.price}
                           onChange={(e) => handleItemChange(idx, 'total_price', parseFloat(e.target.value) || 0)}
-                          className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 font-bold text-xs focus:outline-none focus:border-indigo-500 text-right"
+                          className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 font-bold text-xs focus:outline-none focus:border-indigo-500 text-right"
                         />
                       </div>
                     </div>
@@ -662,15 +662,15 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
             </div>
 
             {/* Financial Summary Breakdown */}
-            <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/60 space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1.5">
-                <DollarSign className="w-4 h-4 text-indigo-400" />
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center space-x-1.5">
+                <DollarSign className="w-4 h-4 text-indigo-600" />
                 <span>Financial Totals & Breakdown</span>
               </h3>
 
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
                 <div>
-                  <label className="block text-slate-400 mb-1">Subtotal ({currency})</label>
+                  <label className="block text-slate-500 mb-1">Subtotal ({currency})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -679,12 +679,12 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setSubtotal(e.target.value === '' ? '' : parseFloat(e.target.value));
                       setHasChanges(true);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 font-semibold text-right"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 font-semibold text-right focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 mb-1">Tax / GST ({currency})</label>
+                  <label className="block text-slate-500 mb-1">Tax / GST ({currency})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -693,12 +693,12 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setTaxTotal(e.target.value === '' ? '' : parseFloat(e.target.value));
                       setHasChanges(true);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-right"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-right focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 mb-1">Discount ({currency})</label>
+                  <label className="block text-slate-500 mb-1">Discount ({currency})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -707,12 +707,12 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setDiscountTotal(e.target.value === '' ? '' : parseFloat(e.target.value));
                       setHasChanges(true);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-right"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-right focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 mb-1">Shipping ({currency})</label>
+                  <label className="block text-slate-500 mb-1">Shipping ({currency})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -721,12 +721,12 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setShippingCharges(e.target.value === '' ? '' : parseFloat(e.target.value));
                       setHasChanges(true);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-right"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-900 text-right focus:outline-none focus:border-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-400 mb-1">Grand Total ({currency})</label>
+                  <label className="block text-slate-500 mb-1">Grand Total ({currency})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -735,19 +735,19 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
                       setGrandTotal(e.target.value === '' ? '' : parseFloat(e.target.value));
                       setHasChanges(true);
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 border border-indigo-500/50 text-indigo-300 font-bold text-right"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border-2 border-indigo-500 text-indigo-700 font-bold text-right focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Validation Warning Alert */}
               {validationWarnings.length > 0 && (
-                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+                <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs space-y-1">
                   <div className="font-bold flex items-center space-x-1.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                    <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
                     <span>Arithmetic Verification Notice:</span>
                   </div>
-                  <ul className="list-disc list-inside space-y-0.5 text-[11px] text-amber-300/90 pl-1">
+                  <ul className="list-disc list-inside space-y-0.5 text-[11px] text-amber-700 pl-1">
                     {validationWarnings.map((w, i) => (
                       <li key={i}>{w}</li>
                     ))}
@@ -761,16 +761,16 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
         </div>
 
         {/* MODAL FOOTER ACTION BAR */}
-        <div className="px-6 py-4 border-t border-slate-800 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 sticky bottom-0 z-20">
-          <div className="text-xs text-slate-400">
-            Clicking <span className="text-slate-200 font-semibold">"Confirm & Save"</span> will permanently commit this receipt, trigger policy calculations, and index into your secure vault.
+        <div className="px-6 py-4 border-t border-slate-200/80 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 sticky bottom-0 z-20">
+          <div className="text-xs text-slate-500">
+            Clicking <span className="text-slate-800 font-semibold">"Confirm & Save"</span> will permanently commit this receipt, trigger policy calculations, and index into your secure vault.
           </div>
 
           <div className="flex items-center space-x-3 w-full sm:w-auto">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition"
+              className="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition cursor-pointer"
             >
               Cancel
             </button>
@@ -779,7 +779,7 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
               type="button"
               onClick={handleRecalculate}
               disabled={isRecalculating}
-              className="px-4 py-2.5 rounded-xl border border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/50 text-indigo-300 text-xs font-semibold transition flex items-center space-x-1.5"
+              className="px-4 py-2.5 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRecalculating ? 'animate-spin' : ''}`} />
               <span>{isRecalculating ? 'Re-extracting...' : 'Re-extract'}</span>
@@ -789,7 +789,7 @@ export const ReviewDraftModal: React.FC<ReviewDraftModalProps> = ({
               type="button"
               onClick={handleConfirmAndSave}
               disabled={isSaving}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/30 transition transform hover:-translate-y-0.5 flex items-center space-x-2"
+              className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition transform hover:-translate-y-0.5 flex items-center space-x-2 cursor-pointer"
             >
               <Lock className="w-4 h-4" />
               <span>{isSaving ? 'Saving...' : 'Confirm & Save'}</span>
