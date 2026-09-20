@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   ShieldCheck,
   Calendar,
@@ -14,10 +14,10 @@ import {
 } from 'lucide-react';
 
 /* =========================================================================
-   TYPE DEFINITIONS
+   TYPES
    ========================================================================= */
 
-interface FeedbackItem {
+interface ReviewCardData {
   id: string;
   quote: string;
   category: string;
@@ -25,9 +25,12 @@ interface FeedbackItem {
   code: string;
   location: string;
   icon: 'shield' | 'calendar' | 'policy' | 'search' | 'edit' | 'archive' | 'calc' | 'camera' | 'lock' | 'sparkles';
+  microTilt: number; // e.g. -1, 0, 1 deg
+  width: number;
+  height: number;
 }
 
-interface BrandItem {
+interface BrandCardData {
   id: string;
   name: string;
   category: string;
@@ -35,60 +38,85 @@ interface BrandItem {
 }
 
 /* =========================================================================
-   AUTHENTIC BRAND DATA POOL (40 BRANDS FROM SUPPLIED REFERENCE SHEETS)
+   REVIEW POOL (DENSE MASONRY FOR THE CONTINUOUS WALL)
    ========================================================================= */
 
-const ALL_BRANDS: BrandItem[] = [
-  // Scene 1: Athletic & Footwear
+const REVIEW_POOL: Omit<ReviewCardData, 'microTilt' | 'width' | 'height'>[] = [
+  { id: 'r1', quote: 'Return window was easy to track.', category: 'Return Guard', handle: 'returns', code: 'IN', location: 'Bengaluru', icon: 'calendar' },
+  { id: 'r2', quote: 'Warranty details were easy to find.', category: 'Asset Guard', handle: 'warranty', code: 'US', location: 'Austin', icon: 'calc' },
+  { id: 'r3', quote: 'Order status was verified instantly.', category: 'Order Lookup', handle: 'verifier', code: 'UK', location: 'London', icon: 'search' },
+  { id: 'r4', quote: 'Original invoice was preserved.', category: 'Receipt Vault', handle: 'vault', code: 'DE', location: 'Munich', icon: 'archive' },
+  { id: 'r5', quote: 'Setup was incredibly smooth.', category: 'Instant Guard', handle: 'setup', code: 'JP', location: 'Tokyo', icon: 'sparkles' },
+  { id: 'r6', quote: 'Everything was easy to organize.', category: 'Smart Vault', handle: 'organize', code: 'FR', location: 'Paris', icon: 'shield' },
+  { id: 'r7', quote: 'The policy source made the answer clear.', category: 'Policy Evidence', handle: 'policy', code: 'IN', location: 'Mumbai', icon: 'policy' },
+  { id: 'r8', quote: 'Editing before saving gave me confidence.', category: 'Draft Review', handle: 'editor', code: 'CA', location: 'Toronto', icon: 'edit' },
+  { id: 'r9', quote: '30-day deadline flagged proactively.', category: 'Expiry Guard', handle: 'alerts', code: 'AU', location: 'Sydney', icon: 'shield' },
+  { id: 'r10', quote: 'Wristwatch warranty calculated to the day.', category: 'Date Precision', handle: 'dates', code: 'CH', location: 'Zurich', icon: 'calc' },
+  { id: 'r11', quote: 'Extracted all items from a wrinkled store bill.', category: 'Vision OCR', handle: 'scanner', code: 'IN', location: 'Delhi', icon: 'camera' },
+  { id: 'r12', quote: 'Zero hallucinations when an order was missing.', category: 'Truth Anchor', handle: 'truth', code: 'SG', location: 'Singapore', icon: 'lock' },
+  { id: 'r13', quote: 'Two-page invoice handled with separate totals.', category: 'Multi-Section', handle: 'sections', code: 'NL', location: 'Amsterdam', icon: 'policy' },
+  { id: 'r14', quote: 'Evidence matched the purchase exactly.', category: 'Grounding', handle: 'grounded', code: 'SE', location: 'Stockholm', icon: 'shield' },
+  { id: 'r15', quote: 'Shopper-isolated vault protected my data.', category: 'Vector Privacy', handle: 'privacy', code: 'US', location: 'Seattle', icon: 'lock' },
+  { id: 'r16', quote: 'Claims deadline reminder saved my purchase.', category: 'Claim Alert', handle: 'claims', code: 'IN', location: 'Pune', icon: 'calendar' },
+  { id: 'r17', quote: 'Calculations were deterministic and fast.', category: 'Calculator', handle: 'math', code: 'KR', location: 'Seoul', icon: 'calc' },
+  { id: 'r18', quote: 'Side-by-side modal showed exact bill values.', category: 'Audit Verifier', handle: 'audit', code: 'IT', location: 'Milan', icon: 'edit' },
+];
+
+/* =========================================================================
+   40 BRAND LOGOS (SUPPLIED REFERENCE SHEETS)
+   ========================================================================= */
+
+const ALL_BRANDS: BrandCardData[] = [
+  // Sportswear & Footwear
   { id: 'nike', name: 'Nike', category: 'Sportswear', tagline: 'Just Do It' },
   { id: 'adidas', name: 'Adidas', category: 'Sportswear', tagline: 'Impossible Is Nothing' },
   { id: 'puma', name: 'Puma', category: 'Sportswear', tagline: 'Forever Faster' },
   { id: 'jordan', name: 'Jordan', category: 'Footwear', tagline: 'Flight Heritage' },
   { id: 'converse', name: 'Converse', category: 'Footwear', tagline: 'All Star' },
 
-  // Scene 2: Luxury Haute Couture
+  // Luxury Haute Couture
   { id: 'gucci', name: 'Gucci', category: 'Luxury', tagline: 'Firenze 1921' },
   { id: 'prada', name: 'Prada', category: 'Haute Couture', tagline: 'Milano 1913' },
   { id: 'dior', name: 'Dior', category: 'Haute Couture', tagline: 'Paris Heritage' },
   { id: 'chanel', name: 'Chanel', category: 'Luxury', tagline: 'Haute Couture' },
   { id: 'louis-vuitton', name: 'Louis Vuitton', category: 'Luxury', tagline: 'Maison Fondée' },
 
-  // Scene 3: Contemporary High Fashion
+  // Contemporary Fashion
   { id: 'balenciaga', name: 'Balenciaga', category: 'High Fashion', tagline: 'Paris Couture' },
   { id: 'valentino', name: 'Valentino', category: 'Luxury', tagline: 'Roma Heritage' },
   { id: 'versace', name: 'Versace', category: 'Luxury', tagline: 'Medusa Couture' },
   { id: 'calvin-klein', name: 'Calvin Klein', category: 'Designer', tagline: 'Modern Minimal' },
   { id: 'zara', name: 'Zara', category: 'Fashion', tagline: 'Global Retail' },
 
-  // Scene 4: Casual & Lifestyle Apparel
+  // Casual Apparel
   { id: 'bershka', name: 'Bershka', category: 'Youth Fashion', tagline: 'Urban Style' },
   { id: 'pull-and-bear', name: 'Pull&Bear', category: 'Casual Wear', tagline: 'Daily Apparel' },
   { id: 'tommy-hilfiger', name: 'Tommy Hilfiger', category: 'Heritage', tagline: 'Classic American' },
   { id: 'guess', name: 'Guess', category: 'Denim', tagline: 'Est. 1981' },
   { id: 'gap', name: 'GAP', category: 'Casual', tagline: 'Clean Denim' },
 
-  // Scene 5: Denim, Surf & Outdoor Tech
+  // Denim & Outdoor Tech
   { id: 'hollister', name: 'Hollister', category: 'Lifestyle', tagline: 'California Coast' },
   { id: 'lacoste', name: 'Lacoste', category: 'Sport Casual', tagline: 'Crocodile Touch' },
   { id: 'levis', name: "Levi's", category: 'Denim Heritage', tagline: 'Original 501' },
   { id: 'supreme', name: 'Supreme', category: 'Streetwear', tagline: 'New York City' },
   { id: 'the-north-face', name: 'The North Face', category: 'Outdoor Tech', tagline: 'Never Stop Exploring' },
 
-  // Scene 6: Athletics & Skate
+  // Athletics & Skate
   { id: 'new-balance', name: 'New Balance', category: 'Athletics', tagline: 'Fearlessly Independent' },
   { id: 'under-armour', name: 'Under Armour', category: 'Performance', tagline: 'Protect This House' },
-  { id: 'reebok', name: 'Reebok', category: 'Fitness', tagline: 'Life Is Not A Spectator Sport' },
+  { id: 'reebok', name: 'Reebok', category: 'Fitness', tagline: 'Vector Athletics' },
   { id: 'quiksilver', name: 'Quiksilver', category: 'Boardwear', tagline: 'Mountain & Wave' },
   { id: 'dc-shoes', name: 'DC Shoes', category: 'Skatewear', tagline: 'Defy Convention' },
 
-  // Scene 7: Streetwear & Global Lifestyle
+  // Lifestyle & Global Icons
   { id: 'benetton', name: 'Benetton', category: 'Apparel', tagline: 'United Colors' },
   { id: 'forever-21', name: 'Forever 21', category: 'Fast Fashion', tagline: 'Daily Trends' },
   { id: 'playboy', name: 'Playboy', category: 'Lifestyle', tagline: 'Signature Icon' },
   { id: 'ny-yankees', name: 'NY Yankees', category: 'Sportswear', tagline: 'Major League' },
   { id: 'apple', name: 'Apple', category: 'Consumer Tech', tagline: 'Think Different' },
 
-  // Scene 8: Global Tech, Automotive & Retail
+  // Global Tech & Automotive
   { id: 'tesla', name: 'Tesla', category: 'Automotive', tagline: 'Future Driven' },
   { id: 'amazon', name: 'Amazon', category: 'Marketplace', tagline: 'Delivering Smiles' },
   { id: 'starbucks', name: 'Starbucks', category: 'Beverages', tagline: 'Coffee Heritage' },
@@ -97,153 +125,11 @@ const ALL_BRANDS: BrandItem[] = [
 ];
 
 /* =========================================================================
-   15 AUTHENTIC RECEIPTGUARD REVIEWS
-   ========================================================================= */
-
-const ALL_REVIEWS: FeedbackItem[] = [
-  {
-    id: 'rev-1',
-    quote: 'Return window was easy to track.',
-    category: 'Return Guard',
-    handle: 'returns',
-    code: 'IN',
-    location: 'Bengaluru',
-    icon: 'calendar',
-  },
-  {
-    id: 'rev-2',
-    quote: 'The policy source made the answer clear.',
-    category: 'Policy Evidence',
-    handle: 'policy',
-    code: 'IN',
-    location: 'Mumbai',
-    icon: 'policy',
-  },
-  {
-    id: 'rev-3',
-    quote: 'Editing before saving gave me confidence.',
-    category: 'Draft Review',
-    handle: 'verifier',
-    code: 'IN',
-    location: 'Pune',
-    icon: 'edit',
-  },
-  {
-    id: 'rev-4',
-    quote: 'Original invoice preserved byte-for-byte.',
-    category: 'Receipt Vault',
-    handle: 'vault',
-    code: 'IN',
-    location: 'Delhi',
-    icon: 'archive',
-  },
-  {
-    id: 'rev-5',
-    quote: 'Order status verified from the database.',
-    category: 'Order Lookup',
-    handle: 'orders',
-    code: 'IN',
-    location: 'Ahmedabad',
-    icon: 'search',
-  },
-  {
-    id: 'rev-6',
-    quote: '30-day deadline flagged proactively.',
-    category: 'Expiry Guard',
-    handle: 'alerts',
-    code: 'IN',
-    location: 'Hyderabad',
-    icon: 'shield',
-  },
-  {
-    id: 'rev-7',
-    quote: 'Wristwatch warranty calculated to the day.',
-    category: 'Date Precision',
-    handle: 'warranty',
-    code: 'IN',
-    location: 'Surat',
-    icon: 'calc',
-  },
-  {
-    id: 'rev-8',
-    quote: 'Extracted all items from a wrinkled store bill.',
-    category: 'Vision OCR',
-    handle: 'scanner',
-    code: 'IN',
-    location: 'Chennai',
-    icon: 'camera',
-  },
-  {
-    id: 'rev-9',
-    quote: 'Zero hallucinations when an order was missing.',
-    category: 'Truth Anchor',
-    handle: 'truth',
-    code: 'IN',
-    location: 'Jaipur',
-    icon: 'lock',
-  },
-  {
-    id: 'rev-10',
-    quote: 'Two-page invoice handled with separate totals.',
-    category: 'Multi-Section',
-    handle: 'sections',
-    code: 'IN',
-    location: 'Kolkata',
-    icon: 'policy',
-  },
-  {
-    id: 'rev-11',
-    quote: 'Evidence matched the purchase exactly.',
-    category: 'Grounding',
-    handle: 'grounded',
-    code: 'IN',
-    location: 'Gurugram',
-    icon: 'shield',
-  },
-  {
-    id: 'rev-12',
-    quote: 'Warranty details were easy to find.',
-    category: 'Asset Guard',
-    handle: 'assets',
-    code: 'IN',
-    location: 'Noida',
-    icon: 'calc',
-  },
-  {
-    id: 'rev-13',
-    quote: 'Return deadline calculator was deterministic.',
-    category: 'Calculator',
-    handle: 'math',
-    code: 'IN',
-    location: 'Chandigarh',
-    icon: 'calc',
-  },
-  {
-    id: 'rev-14',
-    quote: 'Shopper-isolated vault protected my data.',
-    category: 'Vector Privacy',
-    handle: 'privacy',
-    code: 'IN',
-    location: 'Kochi',
-    icon: 'lock',
-  },
-  {
-    id: 'rev-15',
-    quote: 'Verified store return policy in 3 seconds.',
-    category: 'Instant Guard',
-    handle: 'instant',
-    code: 'IN',
-    location: 'Indore',
-    icon: 'sparkles',
-  },
-];
-
-/* =========================================================================
-   MONOCHROME BRAND GLYPH RENDERER (SUBTLE, MINIMAL SAAS STYLE)
+   MONOCHROME BRAND GLYPH COMPONENT
    ========================================================================= */
 
 function BrandGlyph({ id }: { id: string }) {
-  const commonClass = 'w-6 h-6 fill-slate-700 text-slate-700 stroke-none';
+  const commonClass = 'w-5 h-5 fill-slate-700 text-slate-700 stroke-none';
 
   switch (id) {
     case 'nike':
@@ -283,17 +169,9 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'prada':
-      return (
-        <div className="font-serif font-black text-xs tracking-[0.2em] text-slate-800">
-          PRADA
-        </div>
-      );
+      return <div className="font-serif font-black text-[11px] tracking-[0.2em] text-slate-800">PRADA</div>;
     case 'dior':
-      return (
-        <div className="font-serif font-black text-xs tracking-[0.25em] text-slate-800">
-          DIOR
-        </div>
-      );
+      return <div className="font-serif font-black text-[11px] tracking-[0.25em] text-slate-800">DIOR</div>;
     case 'chanel':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -302,17 +180,13 @@ function BrandGlyph({ id }: { id: string }) {
       );
     case 'louis-vuitton':
       return (
-        <div className="font-serif font-black text-xs tracking-wider text-slate-800 flex items-center space-x-0.5">
+        <div className="font-serif font-black text-xs tracking-wider text-slate-800 flex items-center">
           <span className="text-sm">L</span>
           <span className="-ml-1 text-sm font-light">V</span>
         </div>
       );
     case 'balenciaga':
-      return (
-        <div className="font-sans font-black text-[11px] tracking-[0.18em] text-slate-800 uppercase">
-          Balenciaga
-        </div>
-      );
+      return <div className="font-sans font-black text-[10px] tracking-[0.18em] text-slate-800 uppercase">Balenciaga</div>;
     case 'valentino':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -327,35 +201,19 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'calvin-klein':
-      return (
-        <div className="font-sans font-light text-xs tracking-widest text-slate-800">
-          <span className="font-bold">c</span>K
-        </div>
-      );
+      return <div className="font-sans font-light text-xs tracking-widest text-slate-800"><span className="font-bold">c</span>K</div>;
     case 'zara':
-      return (
-        <div className="font-serif font-black text-sm tracking-tighter text-slate-900 scale-y-110">
-          ZARA
-        </div>
-      );
+      return <div className="font-serif font-black text-xs tracking-tighter text-slate-900 scale-y-110">ZARA</div>;
     case 'bershka':
-      return (
-        <div className="font-sans font-black text-[10.5px] tracking-[0.2em] text-slate-800 uppercase">
-          Bershka
-        </div>
-      );
+      return <div className="font-sans font-black text-[9.5px] tracking-[0.2em] text-slate-800 uppercase">Bershka</div>;
     case 'pull-and-bear':
-      return (
-        <div className="font-sans font-extrabold text-[9.5px] tracking-wider text-slate-800 uppercase">
-          Pull&Bear
-        </div>
-      );
+      return <div className="font-sans font-extrabold text-[9px] tracking-wider text-slate-800 uppercase">Pull&Bear</div>;
     case 'tommy-hilfiger':
       return (
-        <div className="flex items-center space-x-1 border border-slate-300 rounded px-1.5 py-0.5">
-          <div className="w-2.5 h-2 bg-blue-900" />
-          <div className="w-2.5 h-2 bg-red-600" />
-          <div className="w-2.5 h-2 bg-blue-900" />
+        <div className="flex items-center space-x-0.5 border border-slate-300 rounded px-1 py-0.5">
+          <div className="w-2 h-2 bg-blue-900" />
+          <div className="w-2 h-2 bg-red-600" />
+          <div className="w-2 h-2 bg-blue-900" />
         </div>
       );
     case 'guess':
@@ -366,11 +224,7 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'gap':
-      return (
-        <div className="border border-slate-700 font-serif font-bold text-[10px] px-1.5 py-0.5 tracking-widest text-slate-800">
-          GAP
-        </div>
-      );
+      return <div className="border border-slate-700 font-serif font-bold text-[9px] px-1 py-0.5 tracking-widest text-slate-800">GAP</div>;
     case 'hollister':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -384,17 +238,9 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'levis':
-      return (
-        <div className="bg-red-700 text-white font-black text-[9px] px-1.5 py-0.5 rounded-xs tracking-tight">
-          Levi's
-        </div>
-      );
+      return <div className="bg-red-700 text-white font-black text-[8.5px] px-1.5 py-0.5 rounded-xs tracking-tight">Levi's</div>;
     case 'supreme':
-      return (
-        <div className="bg-red-600 text-white font-sans italic font-black text-[9.5px] px-1.5 py-0.5 tracking-tight">
-          Supreme
-        </div>
-      );
+      return <div className="bg-red-600 text-white font-sans italic font-black text-[9px] px-1.5 py-0.5 tracking-tight">Supreme</div>;
     case 'the-north-face':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -402,11 +248,7 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'new-balance':
-      return (
-        <div className="font-sans italic font-black text-xs tracking-tighter text-slate-800">
-          NB
-        </div>
-      );
+      return <div className="font-sans italic font-black text-xs tracking-tighter text-slate-800">NB</div>;
     case 'under-armour':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -426,12 +268,7 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'dc-shoes':
-      return (
-        <div className="font-sans font-black text-xs tracking-tighter text-slate-800 flex items-center">
-          <span>DC</span>
-          <span className="text-[9px] ml-0.5">★</span>
-        </div>
-      );
+      return <div className="font-sans font-black text-xs tracking-tighter text-slate-800">DC<span className="text-[9px] ml-0.5">★</span></div>;
     case 'benetton':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -440,11 +277,7 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'forever-21':
-      return (
-        <div className="font-sans font-extrabold text-[10px] tracking-widest text-slate-800">
-          FOREVER 21
-        </div>
-      );
+      return <div className="font-sans font-extrabold text-[9px] tracking-widest text-slate-800">FOREVER 21</div>;
     case 'playboy':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -452,11 +285,7 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     case 'ny-yankees':
-      return (
-        <div className="font-serif font-black text-xs tracking-tighter text-slate-800">
-          NY
-        </div>
-      );
+      return <div className="font-serif font-black text-xs tracking-tighter text-slate-800">NY</div>;
     case 'apple':
       return (
         <svg className={commonClass} viewBox="0 0 24 24">
@@ -498,16 +327,12 @@ function BrandGlyph({ id }: { id: string }) {
         </svg>
       );
     default:
-      return (
-        <div className="font-sans font-bold text-xs text-slate-700 uppercase">
-          {id.slice(0, 3)}
-        </div>
-      );
+      return <div className="font-sans font-bold text-xs text-slate-700 uppercase">{id.slice(0, 3)}</div>;
   }
 }
 
-function ItemIcon({ type }: { type: FeedbackItem['icon'] }) {
-  const className = 'w-4 h-4 text-indigo-600';
+function ItemIcon({ type }: { type: ReviewCardData['icon'] }) {
+  const className = 'w-3.5 h-3.5 text-indigo-600';
   switch (type) {
     case 'shield': return <ShieldCheck className={className} />;
     case 'calendar': return <Calendar className={className} />;
@@ -524,261 +349,281 @@ function ItemIcon({ type }: { type: FeedbackItem['icon'] }) {
 }
 
 /* =========================================================================
-   FIXED PERIMETER POSITIONS (DO NOT RANDOMIZE — PROTECT THE CENTER)
+   6 MASONRY COLUMNS CONFIGURATION FOR THE OVERSIZED TILTED WALL
    ========================================================================= */
 
-interface SlotDefinition {
+interface ColumnConfig {
+  offsetY: number; // Vertical starting offset in px
+  gap: number;
+  width: number;
+  cards: ReviewCardData[];
+}
+
+// Fixed positions for the 4-5 brand logos during Logo Scenes
+interface LogoSlot {
   id: string;
   style: React.CSSProperties;
   responsiveClass: string;
-  floatDelay: string;
 }
 
-const FIXED_SLOTS: SlotDefinition[] = [
-  // Slot A: Top-Left Perimeter
-  {
-    id: 'slot-top-left',
-    style: { top: '10%', left: '7%' },
-    responsiveClass: 'hidden sm:flex',
-    floatDelay: '0s',
-  },
-  // Slot B: Top-Right Perimeter
-  {
-    id: 'slot-top-right',
-    style: { top: '10%', right: '7%' },
-    responsiveClass: 'hidden sm:flex',
-    floatDelay: '1.2s',
-  },
-  // Slot C: Mid-Left Perimeter (Flanking the AI Composer)
-  {
-    id: 'slot-mid-left',
-    style: { top: '48%', left: '5%' },
-    responsiveClass: 'hidden lg:flex',
-    floatDelay: '2.4s',
-  },
-  // Slot D: Mid-Right Perimeter (Flanking the AI Composer)
-  {
-    id: 'slot-mid-right',
-    style: { top: '48%', right: '5%' },
-    responsiveClass: 'hidden lg:flex',
-    floatDelay: '0.8s',
-  },
-  // Slot E: Bottom-Center Anchor (Safely below composer)
-  {
-    id: 'slot-bottom-center',
-    style: { bottom: '8%', left: '50%', transform: 'translateX(-50%)' },
-    responsiveClass: 'hidden md:flex',
-    floatDelay: '1.8s',
-  },
+const BRAND_SLOTS: LogoSlot[] = [
+  // Top-Left perimeter
+  { id: 'logo-tl', style: { top: '16%', left: '12%' }, responsiveClass: 'hidden sm:flex' },
+  // Top-Right perimeter
+  { id: 'logo-tr', style: { top: '16%', right: '12%' }, responsiveClass: 'hidden sm:flex' },
+  // Mid-Left (flanking input field)
+  { id: 'logo-ml', style: { top: '48%', left: '9%' }, responsiveClass: 'hidden lg:flex' },
+  // Mid-Right (flanking input field)
+  { id: 'logo-mr', style: { top: '48%', right: '9%' }, responsiveClass: 'hidden lg:flex' },
+  // Bottom-Center anchor (safely below composer)
+  { id: 'logo-bc', style: { bottom: '15%', left: '50%', transform: 'translateX(-50%)' }, responsiveClass: 'hidden md:flex' },
 ];
 
 /* =========================================================================
-   MAIN COMPONENT: SCENE-ALTERNATING HERO MOTION BACKGROUND
+   MAIN COMPONENT: TILTED CONTINUOUS REVIEW & BRAND WALL
    ========================================================================= */
 
 export const Minimal3DMotionField: React.FC = () => {
-  const [sceneType, setSceneType] = useState<'review' | 'brand'>('review');
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [scene, setScene] = useState<'review' | 'logo'>('review');
+  const [isCrossfading, setIsCrossfading] = useState(false);
 
-  // Global Non-Repeating Cycle Trackers
+  // Global Non-Repeating Used Logos Set
   const usedLogosRef = useRef<Set<string>>(new Set());
-  const brandIndexRef = useRef<number>(0);
-  const reviewIndexRef = useRef<number>(0);
+  const brandPointerRef = useRef<number>(0);
 
-  // Current Scene Active Items (Exactly 5 items for the 5 fixed slots)
-  const [currentReviews, setCurrentReviews] = useState<FeedbackItem[]>(() =>
-    ALL_REVIEWS.slice(0, 5)
-  );
-  const [currentBrands, setCurrentBrands] = useState<BrandItem[]>(() =>
-    ALL_BRANDS.slice(0, 5)
-  );
+  // Current Active Brand Logo Scene (strictly 4-5 logos)
+  const [activeBrands, setActiveBrands] = useState<BrandCardData[]>(() => ALL_BRANDS.slice(0, 5));
 
-  // Core Alternating Timer (Visible ~4 seconds, followed by 600ms smooth transition)
+  // Pre-generate 6 masonry columns with controlled micro-variance
+  const columns: ColumnConfig[] = useMemo(() => {
+    const colDefinitions = [
+      { offsetY: -40, gap: 24, width: 220 },
+      { offsetY: 35, gap: 28, width: 240 },
+      { offsetY: -15, gap: 22, width: 225 },
+      { offsetY: 50, gap: 30, width: 250 },
+      { offsetY: 10, gap: 24, width: 230 },
+      { offsetY: -50, gap: 26, width: 235 },
+    ];
+
+    return colDefinitions.map((col, cIdx) => {
+      // 4 cards per column to build a dense vertical slice
+      const cards: ReviewCardData[] = [0, 1, 2, 3].map((cardIdx) => {
+        const dataIndex = (cIdx * 3 + cardIdx) % REVIEW_POOL.length;
+        const item = REVIEW_POOL[dataIndex];
+        // Subtle micro-tilt: 0deg, -1deg, +1deg
+        const microTilt = (cIdx + cardIdx) % 3 === 0 ? -1 : (cIdx + cardIdx) % 3 === 1 ? 1 : 0;
+        return {
+          ...item,
+          id: `col-${cIdx}-card-${cardIdx}-${item.id}`,
+          microTilt,
+          width: col.width,
+          height: 115 + ((cIdx * 7 + cardIdx * 11) % 25), // varied height 115px to 140px
+        };
+      });
+
+      return {
+        offsetY: col.offsetY,
+        gap: col.gap,
+        width: col.width,
+        cards,
+      };
+    });
+  }, []);
+
+  // Continuous Alternating Scene Controller
+  // Review scene: ~4.5s -> 1.2s crossfade -> Logo scene: ~4.0s -> 1.2s crossfade -> repeat
   useEffect(() => {
-    const sceneDuration = 4000; // 4 seconds visible
-    const transitionDuration = 600; // 0.6s smooth transition
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    const interval = setInterval(() => {
-      // Step 1: Trigger Fade-Out & Slight Blur
-      setIsTransitioning(true);
+    const runSequence = () => {
+      const displayDuration = scene === 'review' ? 4500 : 4000;
+      const transitionDuration = 1200;
 
-      setTimeout(() => {
-        // Step 2: Swap Content while invisible
-        setSceneType((prevType) => {
-          if (prevType === 'review') {
-            // Transitioning to BRAND LOGO SCENE:
-            // Select exactly 5 distinct non-repeating brands
-            const selected: BrandItem[] = [];
-            let pointer = brandIndexRef.current;
+      timeoutId = setTimeout(() => {
+        // Step 1: Start Crossfade (fade out + subtle blur)
+        setIsCrossfading(true);
 
-            for (let i = 0; i < 5; i++) {
-              if (usedLogosRef.current.size >= ALL_BRANDS.length) {
-                // When entire pool is exhausted, start a deliberate new cycle
-                usedLogosRef.current.clear();
-                pointer = 0;
+        setTimeout(() => {
+          // Step 2: Swap Scene Content while obscured
+          setScene((prev) => {
+            if (prev === 'review') {
+              // Select next 5 non-repeating brand logos
+              const selected: BrandCardData[] = [];
+              let ptr = brandPointerRef.current;
+
+              for (let i = 0; i < 5; i++) {
+                if (usedLogosRef.current.size >= ALL_BRANDS.length) {
+                  // Cycle completed: reset pool
+                  usedLogosRef.current.clear();
+                  ptr = 0;
+                }
+                const brand = ALL_BRANDS[ptr % ALL_BRANDS.length];
+                usedLogosRef.current.add(brand.id);
+                selected.push(brand);
+                ptr = (ptr + 1) % ALL_BRANDS.length;
               }
 
-              const brand = ALL_BRANDS[pointer % ALL_BRANDS.length];
-              usedLogosRef.current.add(brand.id);
-              selected.push(brand);
-              pointer = (pointer + 1) % ALL_BRANDS.length;
+              brandPointerRef.current = ptr;
+              setActiveBrands(selected);
+              return 'logo';
+            } else {
+              return 'review';
             }
+          });
 
-            brandIndexRef.current = pointer;
-            setCurrentBrands(selected);
-            return 'brand';
-          } else {
-            // Transitioning to REVIEW SCENE:
-            // Select next 5 reviews sequentially
-            const nextReviewIndex = (reviewIndexRef.current + 5) % ALL_REVIEWS.length;
-            reviewIndexRef.current = nextReviewIndex;
+          // Step 3: End Crossfade (smooth fade in to same positions)
+          setIsCrossfading(false);
+        }, transitionDuration);
+      }, displayDuration);
+    };
 
-            const selected: FeedbackItem[] = [];
-            for (let i = 0; i < 5; i++) {
-              selected.push(ALL_REVIEWS[(nextReviewIndex + i) % ALL_REVIEWS.length]);
-            }
-            setCurrentReviews(selected);
-            return 'review';
-          }
-        });
+    runSequence();
 
-        // Step 3: Fade-In new content into SAME positions
-        setIsTransitioning(false);
-      }, transitionDuration);
-    }, sceneDuration + transitionDuration);
-
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearTimeout(timeoutId);
+  }, [scene]);
 
   return (
     <div
       aria-hidden="true"
-      className="hero-animation-layer absolute inset-0 overflow-hidden pointer-events-none select-none z-0 bg-transparent"
+      className="background-motion select-none pointer-events-none"
     >
-      {/* 5 Fixed Perimeter Slots — Content changes, Positions NEVER change */}
-      {FIXED_SLOTS.map((slot, index) => {
-        const reviewItem = currentReviews[index % currentReviews.length];
-        const brandItem = currentBrands[index % currentBrands.length];
-        const isHovered =
-          (sceneType === 'review' && hoveredCardId === reviewItem?.id) ||
-          (sceneType === 'brand' && hoveredCardId === brandItem?.id);
-
-        return (
+      {/* 
+        =======================================================================
+        LARGE TILTED REVIEW CANVAS (145% width, 165% height, rotateZ(-5deg))
+        Moving slowly via .animate-canvas-drift (26s translate3d cycle)
+        =======================================================================
+      */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div
+          className="w-[145%] h-[165%] flex items-center justify-center animate-canvas-drift transition-transform will-change-transform"
+          style={{
+            transformOrigin: 'center center',
+          }}
+        >
+          {/* =================================================================
+              REVIEW WALL SCENE (Dense editorial masonry columns)
+             ================================================================= */}
           <div
-            key={slot.id}
-            className={`absolute ${slot.responsiveClass} pointer-events-auto items-center justify-center`}
-            style={slot.style}
+            className="absolute inset-0 flex justify-center items-center gap-6 px-12 transition-all"
+            style={{
+              opacity: scene === 'review' && !isCrossfading ? 0.32 : 0,
+              filter: isCrossfading ? 'blur(3px)' : 'blur(0px)',
+              transition: 'opacity 1100ms cubic-bezier(0.4, 0, 0.2, 1), filter 1100ms cubic-bezier(0.4, 0, 0.2, 1)',
+              visibility: scene === 'review' || isCrossfading ? 'visible' : 'hidden',
+            }}
           >
-            {/* Subtle Vertical Floating Idle Animation */}
-            <div
-              className="animate-subtle-float transition-transform duration-300"
-              style={{
-                animationDelay: slot.floatDelay,
-                animationPlayState: hoveredCardId ? 'paused' : 'running',
-              }}
-            >
-              {/* Scene Card Transition Container */}
+            {columns.map((col, cIdx) => (
               <div
+                key={`col-${cIdx}`}
+                className="flex flex-col flex-shrink-0"
                 style={{
-                  opacity: isTransitioning ? 0 : isHovered ? 1.0 : 0.88,
-                  filter: isTransitioning ? 'blur(6px)' : 'blur(0px)',
-                  transform: isTransitioning
-                    ? 'scale(0.96) translateY(4px)'
-                    : isHovered
-                    ? 'scale(1.04) translateY(-2px)'
-                    : 'scale(1.0)',
-                  transition:
-                    'opacity 550ms cubic-bezier(0.4, 0, 0.2, 1), filter 550ms cubic-bezier(0.4, 0, 0.2, 1), transform 550ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  width: `${col.width}px`,
+                  gap: `${col.gap}px`,
+                  transform: `translateY(${col.offsetY}px)`,
                 }}
               >
-                {sceneType === 'review' ? (
-                  /* ================= REVIEW CARD SCENE ================= */
+                {col.cards.map((card) => (
                   <div
-                    onMouseEnter={() => setHoveredCardId(reviewItem.id)}
-                    onMouseLeave={() => setHoveredCardId(null)}
-                    className="w-[215px] sm:w-[235px] rounded-[20px] p-4 cursor-default border flex flex-col justify-between"
+                    key={card.id}
+                    className="rounded-[20px] p-3.5 border flex flex-col justify-between transition-transform duration-500"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.92)',
-                      border: isHovered
-                        ? '1px solid rgba(99, 102, 241, 0.4)'
-                        : '1px solid rgba(15, 23, 42, 0.09)',
-                      boxShadow: isHovered
-                        ? '0 16px 36px -4px rgba(15, 23, 42, 0.12)'
-                        : '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03)',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
+                      width: `${card.width}px`,
+                      minHeight: `${card.height}px`,
+                      background: 'rgba(255, 255, 255, 0.82)',
+                      border: '1px solid rgba(100, 110, 140, 0.13)',
+                      boxShadow: '0 8px 30px rgba(40, 50, 80, 0.04)',
+                      transform: `rotate(${card.microTilt}deg)`,
+                      backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)',
                     }}
                   >
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center space-x-2">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-indigo-50 to-purple-50 border border-indigo-200/80 flex items-center justify-center flex-shrink-0 shadow-2xs">
-                          <ItemIcon type={reviewItem.icon} />
+                        <div className="w-6 h-6 rounded-full bg-slate-100/90 border border-slate-200/80 flex items-center justify-center flex-shrink-0">
+                          <ItemIcon type={card.icon} />
                         </div>
                         <div className="flex flex-col text-left">
-                          <span className="text-xs font-bold text-slate-900 tracking-tight leading-none">
-                            {reviewItem.category}
+                          <span className="text-[11px] font-bold text-slate-800 tracking-tight leading-none">
+                            {card.category}
                           </span>
-                          <span className="text-[10px] text-slate-400 font-medium mt-0.5">
-                            @{reviewItem.handle}
+                          <span className="text-[9px] text-slate-400 font-medium mt-0.5">
+                            @{card.handle}
                           </span>
                         </div>
                       </div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                        {reviewItem.code}
+                      <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider">
+                        {card.code}
                       </span>
                     </div>
 
                     {/* Quote */}
-                    <p className="text-[12px] font-semibold text-slate-700 leading-snug text-left">
-                      "{reviewItem.quote}"
+                    <p className="text-[11px] font-medium text-slate-700 leading-snug text-left line-clamp-2">
+                      "{card.quote}"
                     </p>
                   </div>
-                ) : (
-                  /* ================= BRAND LOGO SCENE ================= */
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* =================================================================
+              BRAND LOGO SCENE (4-5 logos in perimeter positions, -5deg angle)
+             ================================================================= */}
+          <div
+            className="absolute inset-0 transition-all"
+            style={{
+              opacity: scene === 'logo' && !isCrossfading ? 0.36 : 0,
+              filter: isCrossfading ? 'blur(3px)' : 'blur(0px)',
+              transition: 'opacity 1100ms cubic-bezier(0.4, 0, 0.2, 1), filter 1100ms cubic-bezier(0.4, 0, 0.2, 1)',
+              visibility: scene === 'logo' || isCrossfading ? 'visible' : 'hidden',
+            }}
+          >
+            {BRAND_SLOTS.map((slot, idx) => {
+              const brand = activeBrands[idx % activeBrands.length];
+              if (!brand) return null;
+
+              return (
+                <div
+                  key={slot.id}
+                  className={`absolute ${slot.responsiveClass} items-center justify-center`}
+                  style={slot.style}
+                >
                   <div
-                    onMouseEnter={() => setHoveredCardId(brandItem.id)}
-                    onMouseLeave={() => setHoveredCardId(null)}
-                    className="w-[215px] sm:w-[235px] rounded-[20px] px-4 py-3.5 cursor-default border flex items-center justify-between"
+                    className="w-[215px] sm:w-[235px] rounded-[20px] px-4 py-3 border flex items-center justify-between transition-transform duration-700"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.92)',
-                      border: isHovered
-                        ? '1px solid rgba(99, 102, 241, 0.4)'
-                        : '1px solid rgba(15, 23, 42, 0.09)',
-                      boxShadow: isHovered
-                        ? '0 16px 36px -4px rgba(15, 23, 42, 0.12)'
-                        : '0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03)',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
+                      background: 'rgba(255, 255, 255, 0.84)',
+                      border: '1px solid rgba(100, 110, 140, 0.13)',
+                      boxShadow: '0 8px 30px rgba(40, 50, 80, 0.04)',
+                      backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)',
+                      transform: 'scale(1.0)',
                     }}
                   >
                     <div className="flex items-center space-x-3">
-                      {/* Monochrome Brand Mark Container */}
                       <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center flex-shrink-0 text-slate-700 shadow-2xs">
-                        <BrandGlyph id={brandItem.id} />
+                        <BrandGlyph id={brand.id} />
                       </div>
                       <div className="flex flex-col text-left">
                         <span className="text-xs font-bold text-slate-800 tracking-tight leading-tight">
-                          {brandItem.name}
+                          {brand.name}
                         </span>
                         <span className="text-[10px] text-slate-400 font-medium">
-                          {brandItem.tagline}
+                          {brand.tagline}
                         </span>
                       </div>
                     </div>
 
-                    {/* Subtle Category Pill */}
-                    <span className="text-[9px] uppercase tracking-wider text-slate-500 font-bold bg-slate-100/90 px-2 py-0.5 rounded-full border border-slate-200/60">
-                      {brandItem.category}
+                    <span className="text-[8.5px] uppercase tracking-wider text-slate-500 font-bold bg-slate-100/90 px-2 py-0.5 rounded-full border border-slate-200/60">
+                      {brand.category}
                     </span>
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
+        </div>
+      </div>
     </div>
   );
 };

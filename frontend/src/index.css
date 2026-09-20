@@ -117,7 +117,8 @@
   .animate-marquee-down,
   .animate-marquee-left,
   .animate-marquee-right,
-  .animate-subtle-float {
+  .animate-subtle-float,
+  .animate-canvas-drift {
     animation: none !important;
     transform: none !important;
   }
@@ -129,6 +130,14 @@
   overflow: hidden;
 }
 
+.background-motion {
+  position: absolute;
+  inset: -15% -12%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .hero-animation-layer {
   position: absolute;
   inset: 0;
@@ -136,17 +145,21 @@
   pointer-events: none;
 }
 
-@keyframes subtle-float {
-  0%, 100% {
-    transform: translateY(0px);
+@keyframes canvas-slow-drift {
+  0% {
+    transform: translate3d(-20px, 0px, 0) rotateZ(-5deg);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translate3d(22px, -22px, 0) rotateZ(-5deg);
+  }
+  100% {
+    transform: translate3d(-20px, 0px, 0) rotateZ(-5deg);
   }
 }
 
-.animate-subtle-float {
-  animation: subtle-float 5.5s ease-in-out infinite;
+.animate-canvas-drift {
+  animation: canvas-slow-drift 24s ease-in-out infinite;
   will-change: transform;
 }
+
 

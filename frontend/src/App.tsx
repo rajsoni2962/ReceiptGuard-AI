@@ -148,22 +148,22 @@ export function App() {
           {/* Layer: Dedicated Hero Animation Layer */}
           <Minimal3DMotionField />
 
-          {/* Layer 2: Soft White Radial Clear Zone around the Center (Narrower 38% radius) */}
+          {/* Layer 2: Soft White Radial Clear Zone around the Center (z-index: 2) */}
           <div 
-            className="absolute inset-0 z-10 pointer-events-none"
+            className="absolute inset-0 z-2 pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 18%, rgba(255,255,255,0.45) 38%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0) 78%)'
+              background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.90) 25%, rgba(255,255,255,0.60) 48%, rgba(255,255,255,0.15) 72%, rgba(255,255,255,0) 88%)'
             }}
           />
 
-          {/* Layer 3: Gradual Edge Fades into Pure White */}
-          <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-white via-white/70 to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white via-white/60 to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white via-white/60 to-transparent pointer-events-none z-10" />
+          {/* Layer 3: Gradual Edge Fades into Pure White (z-index: 3) */}
+          <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-white via-white/70 to-transparent pointer-events-none z-3" />
+          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-3" />
+          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white via-white/60 to-transparent pointer-events-none z-3" />
+          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white via-white/60 to-transparent pointer-events-none z-3" />
 
-          {/* Layer 4: Exact Center AI Input Only (Zero Marketing Copy) */}
-          <div className="relative z-20 w-full max-w-2xl px-4 my-auto flex flex-col items-center justify-center text-center">
+          {/* Layer 4: Exact Center AI Input Only (.hero-content, z-index: 10) */}
+          <div className="hero-content relative z-10 w-full max-w-2xl px-4 my-auto flex flex-col items-center justify-center text-center">
             <div className="mb-6 flex items-center space-x-2.5">
               <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
                 <ShieldCheck className="w-6 h-6" />
