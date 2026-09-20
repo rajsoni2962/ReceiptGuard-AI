@@ -148,14 +148,19 @@ export function App() {
           {/* Layer 2: 3D Moving Review & Brand Cards in Background */}
           <Minimal3DMotionField />
 
-          {/* Layer 3: Soft White Radial Clear Zone around the Center */}
-          <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(ellipse_at_center,#FFFFFF_0%,rgba(255,255,255,0.96)_35%,rgba(255,255,255,0.70)_60%,rgba(255,255,255,0.05)_100%)]" />
+          {/* Layer 2: Soft White Radial Clear Zone around the Center (Narrower 38% radius) */}
+          <div 
+            className="absolute inset-0 z-10 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 18%, rgba(255,255,255,0.45) 38%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0) 78%)'
+            }}
+          />
 
-          {/* Edge Fades into Pure White */}
-          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+          {/* Layer 3: Gradual Edge Fades into Pure White */}
+          <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-white via-white/70 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white via-white/60 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white via-white/60 to-transparent pointer-events-none z-10" />
 
           {/* Layer 4: Exact Center AI Input Only (Zero Marketing Copy) */}
           <div className="relative z-20 w-full max-w-2xl px-4 my-auto flex flex-col items-center justify-center text-center">
