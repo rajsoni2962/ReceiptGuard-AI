@@ -40,7 +40,7 @@ async def db_init_middleware(request: Request, call_next):
 
 import os
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 # CORS Configuration with Vercel and Render deployment support
@@ -104,7 +104,8 @@ if frontend_dist:
             index_html = os.path.join(frontend_dist, "index.html")
             if os.path.exists(index_html):
                 return FileResponse(index_html)
-        return {"detail": "Not Found"}
+        detail_msg = getattr(exc, "detail", "Not Found")
+        return JSONResponse(status_code=404, content={"detail": detail_msg})
 else:
     @app.get("/")
     def root():
