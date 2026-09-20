@@ -22,8 +22,9 @@ class ChromaService:
             items=items
         )
 
-    def index_policy_sections(self, store_name: str, sections: List[Dict[str, Any]]):
-        return vector_store.index_policy_sections(store_name=store_name, sections=sections)
+    def index_policy_sections(self, store_name: str = "", sections: List[Dict[str, Any]] = None, **kwargs):
+        final_store = store_name or kwargs.get("store", "")
+        return vector_store.index_policy_sections(store_name=final_store, sections=sections or [])
 
     def query_similar(
         self,

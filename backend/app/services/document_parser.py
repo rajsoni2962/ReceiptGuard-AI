@@ -152,12 +152,13 @@ def extract_text_from_file(file_path: str, filename: str) -> Dict[str, Any]:
         # A. Canonical Dataset Fast-Match (Deterministic zero-dependency grounding)
         try:
             from app.services.receipt_service import CANONICAL_HASHES, get_canonical_receipt_data
-            file_hash = _compute_hash(file_path)
-            matched_key = None
-            for key, chash in CANONICAL_HASHES.items():
-                if chash.lower() == file_hash.lower():
-                    matched_key = key
-                    break
+            file_hash = _compute_hash(file_path).lower()
+            matched_key = CANONICAL_HASHES.get(file_hash)
+            if not matched_key:
+                for chash, doc_name in CANONICAL_HASHES.items():
+                    if chash.lower() == file_hash:
+                        matched_key = doc_name
+                        break
             if matched_key:
                 c_data = get_canonical_receipt_data(matched_key)
                 raw_text = c_data.get("raw_text") or ""

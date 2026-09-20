@@ -1,5 +1,9 @@
 import sys
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("vercel_backend")
 
 # Resolve paths so backend modules import cleanly on Vercel when root is backend
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -12,16 +16,18 @@ for p in [backend_dir, root_dir, current_dir]:
 
 try:
     from app.main import app
+    logger.info("Successfully loaded FastAPI app from app.main")
 except Exception as e:
     import traceback
     err_tb = traceback.format_exc()
-    print(f"CRITICAL BACKEND STARTUP ERROR:\n{err_tb}", file=sys.stderr)
+    logger.error(f"CRITICAL BACKEND STARTUP ERROR:\n{err_tb}")
     from fastapi import FastAPI
     from fastapi.responses import JSONResponse
     app = FastAPI()
 
+    @app.api_route("/", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"])
-    async def fallback_handler(path: str):
+    async def fallback_handler(path: str = ""):
         return JSONResponse(
             status_code=500,
             content={
@@ -31,5 +37,12 @@ except Exception as e:
             }
         )
 
-# Expose app for Vercel when Root Directory is set to 'backend'
-__all__ = ["app"]
+try:
+    from mangum import Mangum
+    handler = Mangum(app, lifespan="off")
+except Exception as e:
+    logger.warning(f"Mangum adapter notice: {e}")
+    handler = app
+
+# Expose both app and handler for universal Vercel / AWS Lambda compatibility
+__all__ = ["app", "handler"]

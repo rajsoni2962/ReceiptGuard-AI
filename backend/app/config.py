@@ -8,7 +8,13 @@ class Settings:
     API_V1_STR: str = "/api"
     
     # Environment & Paths
-    IS_SERVERLESS: bool = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+    IS_SERVERLESS: bool = bool(
+        os.getenv("VERCEL") or 
+        os.getenv("VERCEL_ENV") or 
+        os.getenv("AWS_LAMBDA_FUNCTION_NAME") or 
+        os.getenv("LAMBDA_TASK_ROOT") or
+        os.getenv("NOW_REGION")
+    )
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     # Database
