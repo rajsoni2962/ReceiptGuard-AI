@@ -123,7 +123,7 @@ export function App() {
     <div className={`font-sans relative ${
       isLanding
         ? 'h-[100dvh] max-h-[100dvh] overflow-hidden bg-white text-slate-900'
-        : 'min-h-screen bg-[#030712] text-slate-100'
+        : 'light-ui min-h-screen bg-slate-50 text-slate-900'
     }`}>
       {/* Toast Notification */}
       {toastMessage && (
@@ -324,7 +324,7 @@ export function App() {
 
       {/* Footer (Only rendered on non-landing views so homepage remains strictly non-scrolling) */}
       {!isLanding && (
-        <footer className="border-t border-slate-800 bg-navy-950 py-6 mt-12 text-center text-xs text-slate-400">
+        <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-center text-xs text-slate-400">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <span className="font-bold text-slate-200">ReceiptGuard AI</span> — Built for responsible, grounded AI purchase protection.
