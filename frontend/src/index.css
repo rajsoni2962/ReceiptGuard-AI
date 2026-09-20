@@ -116,8 +116,37 @@
   .animate-marquee-up,
   .animate-marquee-down,
   .animate-marquee-left,
-  .animate-marquee-right {
+  .animate-marquee-right,
+  .animate-subtle-float {
     animation: none !important;
     transform: none !important;
   }
 }
+
+/* Dedicated Hero Motion Layer Styles */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-animation-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-subtle-float {
+  animation: subtle-float 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+

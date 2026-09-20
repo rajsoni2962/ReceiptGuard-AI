@@ -144,8 +144,8 @@ export function App() {
 
       {/* ULTRA-MINIMAL PURE WHITE SINGLE-SCREEN LAUNCHPAD */}
       {isLanding ? (
-        <main className="flex-1 w-full h-[calc(100dvh-4rem)] overflow-hidden relative flex items-center justify-center select-none bg-white">
-          {/* Layer 2: 3D Moving Review & Brand Cards in Background */}
+        <main className="hero flex-1 w-full h-[calc(100dvh-4rem)] overflow-hidden relative flex items-center justify-center select-none bg-white">
+          {/* Layer: Dedicated Hero Animation Layer */}
           <Minimal3DMotionField />
 
           {/* Layer 2: Soft White Radial Clear Zone around the Center (Narrower 38% radius) */}
