@@ -30,7 +30,7 @@ export const ProtectionSummary: React.FC<ProtectionSummaryProps> = ({ summary })
                 </h3>
               </div>
               <p className="text-xs text-amber-800/90 mt-1">
-                ReceiptGuard automatically calculated return deadlines immediately at receipt ingestion before any question was asked.
+                Rupertrace automatically calculated return deadlines immediately at receipt ingestion before any question was asked.
               </p>
               {summary.alerts.map((alert, i) => (
                 <div key={i} className="mt-2 text-xs text-amber-900 bg-white/90 p-2.5 rounded-xl border border-amber-200 flex items-center space-x-2 shadow-2xs">

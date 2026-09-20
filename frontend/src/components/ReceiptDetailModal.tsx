@@ -146,7 +146,7 @@ export const ReceiptDetailModal: React.FC<ReceiptDetailModalProps> = ({
               <div className="lg:col-span-6 flex flex-col space-y-3">
                 <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
                   <span>ORIGINAL UPLOADED DOCUMENT</span>
-                  <span>PRESERVED BY RECEIPTGUARD</span>
+                  <span>PRESERVED BY RUPERTRACE</span>
                 </div>
                 
                 <div className="relative rounded-xl border border-slate-200 bg-slate-50 overflow-hidden flex items-center justify-center min-h-[480px] max-h-[620px]">
@@ -375,7 +375,7 @@ export const ReceiptDetailModal: React.FC<ReceiptDetailModalProps> = ({
                       className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-xs transition text-xs"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
-                      <span>Ask ReceiptGuard</span>
+                      <span>Ask Rupertrace</span>
                     </button>
                   )}
                 </div>

@@ -308,7 +308,7 @@ export const Feedback3DWall: React.FC = () => {
         </h2>
 
         <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-          See how ReceiptGuard helps customers keep track of the purchase details that matter—from return deadlines to warranty clauses.
+          See how Rupertrace helps customers keep track of the purchase details that matter—from return deadlines to warranty clauses.
         </p>
       </div>
 

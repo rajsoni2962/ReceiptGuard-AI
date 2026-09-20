@@ -308,7 +308,7 @@ export const ReceiptVault: React.FC<ReceiptVaultProps> = ({
           <div className="max-w-md mx-auto space-y-1">
             <h3 className="text-lg font-bold text-slate-900">No saved receipts yet.</h3>
             <p className="text-xs text-slate-500">
-              Upload your first receipt and ReceiptGuard will protect the details that matter.
+              Upload your first receipt and Rupertrace will protect the details that matter.
             </p>
           </div>
           <button

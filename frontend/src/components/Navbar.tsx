@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div>
             <div className="flex items-center space-x-2">
               <span className="text-lg font-bold tracking-tight text-slate-900 group-hover:text-indigo-950 transition-colors">
-                ReceiptGuard <span className="text-indigo-600 font-extrabold">AI</span>
+                Rupertrace
               </span>
             </div>
           </div>

@@ -8,7 +8,7 @@ from app.tools.order_tool import perform_order_lookup
 from app.models import Receipt, ReceiptItem, CalculationResult, StorePolicy, PolicySection
 from app.schemas import SourceCitation
 
-SYSTEM_PROMPT = """You are ReceiptGuard AI, a Personal Purchase Protection Agent.
+SYSTEM_PROMPT = """You are Rupertrace, a Personal Purchase Protection Agent.
 Your duty is to answer shopper questions strictly based on factual context provided from their uploaded receipt, stored store policy, or order database.
 
 STRICT GUARANTEES & ANTI-HALLUCINATION RULES:

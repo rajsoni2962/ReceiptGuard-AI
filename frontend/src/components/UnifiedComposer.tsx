@@ -472,7 +472,7 @@ export const UnifiedComposer: React.FC<UnifiedComposerProps> = ({
                   : 'bg-slate-950 border border-slate-800 text-slate-300'
               }`}>
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>ReceiptGuard Engine</span>
+                <span>Rupertrace Engine</span>
               </div>
             </div>
 

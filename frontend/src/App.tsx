@@ -178,14 +178,14 @@ export function App() {
               type="button"
               onClick={handleNavigateHome}
               className="mb-6 flex items-center space-x-2.5 cursor-pointer group focus:outline-hidden transition-transform duration-200 active:scale-95"
-              title="ReceiptGuard AI Homepage"
-              aria-label="ReceiptGuard AI Homepage"
+              title="Rupertrace Homepage"
+              aria-label="Rupertrace Homepage"
             >
               <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 group-hover:shadow-indigo-600/45 group-hover:scale-105 transition-all duration-200">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight group-hover:text-indigo-950 transition-colors">
-                ReceiptGuard <span className="text-indigo-600">AI</span>
+                Rupertrace
               </h1>
             </button>
 
@@ -348,7 +348,7 @@ export function App() {
         <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-center text-xs text-slate-500 shadow-2xs">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <span className="font-bold text-slate-800">ReceiptGuard AI</span> — Built for responsible, grounded AI purchase protection.
+              <span className="font-bold text-slate-800">Rupertrace</span> — Built for responsible, grounded AI purchase protection.
             </div>
             <div className="text-slate-500 text-[11px]">
               Consumer Purchase Protection • Persistent Receipt Vault • Native PDF + OCR • Deterministic Protection

@@ -3,7 +3,7 @@ import json
 from typing import List, Optional
 
 class Settings:
-    PROJECT_NAME: str = "ReceiptGuard AI"
+    PROJECT_NAME: str = "Rupertrace"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api"
     

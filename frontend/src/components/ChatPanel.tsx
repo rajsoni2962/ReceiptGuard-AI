@@ -76,7 +76,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ shopperId, receiptId }) =>
             <Bot className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900 tracking-tight">ReceiptGuard Assistant</h3>
+            <h3 className="text-sm font-bold text-slate-900 tracking-tight">Rupertrace Assistant</h3>
             <p className="text-[11px] text-emerald-600 font-medium flex items-center space-x-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>Grounded in your receipt &amp; store policy</span>

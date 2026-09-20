@@ -29,7 +29,7 @@ def ensure_db_ready():
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="ReceiptGuard AI: Your Personal Purchase Protection Agent API"
+    description="Rupertrace: Your Personal Purchase Protection Agent API"
 )
 
 # Non-blocking middleware ensuring database is initialized on first request
@@ -92,7 +92,7 @@ if frontend_dist:
         if os.path.exists(index_html):
             return FileResponse(index_html)
         return {
-            "message": "Welcome to ReceiptGuard AI - Personal Purchase Protection Agent API",
+            "message": "Welcome to Rupertrace - Personal Purchase Protection Agent API",
             "docs": "/docs",
             "version": settings.VERSION,
             "status": "online"
@@ -110,7 +110,7 @@ else:
     @app.get("/")
     def root():
         return {
-            "message": "Welcome to ReceiptGuard AI - Personal Purchase Protection Agent API",
+            "message": "Welcome to Rupertrace - Personal Purchase Protection Agent API",
             "docs": "/docs",
             "version": settings.VERSION,
             "status": "online"
