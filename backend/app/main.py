@@ -17,12 +17,11 @@ def ensure_db_ready():
     if not _db_initialized:
         try:
             init_db()
-            if settings.DEMO_MODE or (settings.DATABASE_URL.startswith("sqlite") and not settings.IS_SERVERLESS):
-                try:
-                    from app.seed_data import seed_database
-                    seed_database()
-                except Exception as e:
-                    print(f"Seed database notice: {e}")
+            try:
+                from app.seed_data import seed_database
+                seed_database()
+            except Exception as e:
+                print(f"Seed database notice: {e}")
             _db_initialized = True
         except Exception as e:
             print(f"Database init notice: {e}")
@@ -72,10 +71,17 @@ if not settings.IS_SERVERLESS:
 
 # Frontend static asset serving when built (Fullstack Render / Docker support)
 current_dir = os.path.dirname(os.path.abspath(__file__))
-repo_root = os.path.dirname(os.path.dirname(current_dir))
-frontend_dist = os.path.join(repo_root, "frontend", "dist")
+backend_dir = os.path.dirname(current_dir)
+repo_root = os.path.dirname(backend_dir)
+candidate_paths = [
+    os.path.join(repo_root, "frontend", "dist"),
+    os.path.join(backend_dir, "frontend", "dist"),
+    os.path.join(os.getcwd(), "frontend", "dist"),
+    "/app/frontend/dist"
+]
+frontend_dist = next((p for p in candidate_paths if os.path.exists(p) and os.path.isdir(p)), None)
 
-if os.path.exists(frontend_dist) and os.path.isdir(frontend_dist):
+if frontend_dist:
     assets_dir = os.path.join(frontend_dist, "assets")
     if os.path.exists(assets_dir):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="frontend_assets")

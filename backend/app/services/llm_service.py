@@ -133,14 +133,16 @@ def generate_grounded_answer(
             continue
         policy_chunks = chroma_service.query_policy_documents(store=s_name, query=question, n_results=2)
         for p in policy_chunks:
-            doc_text = p.get("document", "")
-            meta = p.get("metadata", {})
+            doc_text = p.get("document") or p.get("full_text") or ""
+            meta = p.get("metadata") if isinstance(p.get("metadata"), dict) else p
+            section_code = meta.get("section_code", "")
+            store_label = meta.get("store", s_name)
             if doc_text and doc_text not in context_chunks:
                 context_chunks.append(doc_text)
                 sources.append(SourceCitation(
                     source_type="policy",
-                    title=f"Policy Clause {meta.get('section_code', '')}",
-                    reference=f"{meta.get('store', s_name)} {meta.get('section_code', '')}",
+                    title=f"Policy Clause {section_code}".strip(),
+                    reference=f"{store_label} {section_code}".strip(),
                     snippet=doc_text[:150] + "..."
                 ))
 

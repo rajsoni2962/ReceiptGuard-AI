@@ -3,7 +3,12 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "backend/canonical_documents/**"
+        ]
+      }
     },
     {
       "src": "frontend/package.json",
@@ -16,6 +21,18 @@
   "routes": [
     {
       "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/docs",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/openapi.json",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/redoc",
       "dest": "api/index.py"
     },
     {

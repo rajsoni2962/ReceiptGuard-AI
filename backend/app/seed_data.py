@@ -281,7 +281,11 @@ def seed_database(db: Session = None):
             os.makedirs(shopper_vault_dir, exist_ok=True)
             vault_filename = f"receipt_{receipt_id[:8]}_{display_filename}"
             permanent_vault_path = os.path.join(shopper_vault_dir, vault_filename)
-            shutil.copy2(src_file_path, permanent_vault_path)
+            if os.path.exists(src_file_path):
+                try:
+                    shutil.copy2(src_file_path, permanent_vault_path)
+                except Exception as copy_err:
+                    print(f"Vault seed copy notice: {copy_err}")
 
             storage_key = f"demo-shopper-001/{vault_filename}"
             mime_type = get_media_type(display_filename)

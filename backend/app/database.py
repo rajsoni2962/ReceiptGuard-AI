@@ -16,6 +16,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def init_db():
+    try:
+        import app.models  # Ensures all ORM models are registered with Base.metadata
+    except Exception as e:
+        print(f"Model import notice: {e}")
     Base.metadata.create_all(bind=engine)
     # Lightweight SQLite column schema sync (only applies to SQLite)
     if not settings.DATABASE_URL.startswith("sqlite"):
